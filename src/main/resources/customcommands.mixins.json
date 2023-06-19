@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.drex.meliuscommands.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ArgumentTypesAccessor",
+    "CommandContextAccessor",
+    "CommandNodeAccessor",
+    "ComponentMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

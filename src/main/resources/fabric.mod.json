@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "melius-commands",
+  "version": "${version}",
+
+  "name": "Melius Commands",
+  "description": "Create custom commands, modify existing commands",
+  "authors": [
+    "Drex"
+  ],
+  "contact": {
+    "sources": "https://github.com/DrexHD/MeliusCommands"
+  },
+  "license": "MIT",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.drex.meliuscommands.CustomCommands"
+    ]
+  },
+  "mixins": [
+    "customcommands.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "fabric": "*",
+    "java": ">=17"
+  }
+}

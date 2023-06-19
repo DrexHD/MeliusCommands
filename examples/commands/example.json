@@ -1,0 +1,83 @@
+{
+	"id": "example",
+	"requires": {
+		"type": "permission",
+		"permission": "example",
+		"operator": 2
+	},
+	"literals": [
+		{
+			"id": "reward",
+			"arguments": [
+				{
+					"id": "target",
+					"type": "minecraft:entity players",
+					"executes": [
+						{
+							"command": "tellraw ${target} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
+							"as_console": true
+						},
+						{
+							"command": "give ${target} apple",
+							"as_console": true,
+							"silent": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"id": "checkerboard",
+			"arguments": [
+				{
+					"id": "first_block",
+					"type": "minecraft:block_state",
+					"arguments": [
+						{
+							"id": "second_block",
+							"type": "minecraft:block_state",
+							"executes": [
+								{
+									"command": "setblock ~ ~-1 ~ ${first_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~1 ~-1 ~ ${second_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~-1 ~-1 ~ ${second_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~ ~-1 ~1 ${second_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~ ~-1 ~-1 ${second_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~1 ~-1 ~1 ${first_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~1 ~-1 ~-1 ${first_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~-1 ~-1 ~1 ${first_block}",
+									"silent": true
+								},
+								{
+									"command": "setblock ~-1 ~-1 ~-1 ${first_block}",
+									"silent": true
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
