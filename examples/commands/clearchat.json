@@ -1,6 +1,6 @@
 {
 	"id": "clearchat",
-	"requires": {
+	"require": {
 		"type": "permission",
 		"permission": "clearchat"
 	  },

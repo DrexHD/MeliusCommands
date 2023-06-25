@@ -1,6 +1,6 @@
 {
 	"id": "example",
-	"requires": {
+	"require": {
 		"type": "permission",
 		"permission": "example",
 		"operator": 2

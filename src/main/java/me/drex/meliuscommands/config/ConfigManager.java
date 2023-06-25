@@ -46,6 +46,7 @@ public class ConfigManager {
     public static void init() {
         CommandRegistrationCallback.EVENT.addPhaseOrdering(Event.DEFAULT_PHASE, MODIFY_COMMAND_REQUIREMENTS);
         CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> {
+            load();
             CUSTOM_COMMANDS.forEach((path, literalNode) -> {
                 try {
                     dispatcher.register(literalNode.build(context));
@@ -71,10 +72,6 @@ public class ConfigManager {
                 }
             });
         });
-        ServerLifecycleEvents.START_DATA_PACK_RELOAD.register((server, resourceManager) -> {
-            load();
-        });
-        load();
     }
 
     public static void load() {

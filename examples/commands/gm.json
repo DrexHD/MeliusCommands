@@ -1,6 +1,6 @@
 {
   "id": "gm",
-  "requires": {
+  "require": {
     "type": "permission",
     "permission": "minecraft.gamemode",
     "operator": 2
