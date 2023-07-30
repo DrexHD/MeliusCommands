@@ -10,17 +10,34 @@
 			"id": "reward",
 			"arguments": [
 				{
-					"id": "target",
+					"id": "targets",
 					"type": "minecraft:entity players",
 					"executes": [
 						{
-							"command": "tellraw ${target} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
+							"command": "tellraw ${targets} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
 							"as_console": true
 						},
 						{
-							"command": "give ${target} apple",
+							"command": "give ${targets} apple",
 							"as_console": true,
 							"silent": true
+						}
+					],
+					"arguments": [
+						{
+							"id": "count",
+							"type": "brigadier:integer 1 64",
+							"executes": [
+								{
+									"command": "tellraw ${targets} {\"text\":\"You have been rewarded ${count} apples!\",\"italic\":true,\"color\":\"gray\"}",
+									"as_console": true
+								},
+								{
+									"command": "give ${targets} apple ${count}",
+									"as_console": true,
+									"silent": true
+								}
+							]
 						}
 					]
 				}
