@@ -24,7 +24,7 @@ public class CommandsMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onRegister(Commands.CommandSelection commandSelection, CommandBuildContext commandBuildContext, CallbackInfo ci) {
-        // We are using RETURN with a high priority to ensure that we are *LAST* and can also modify commands from which
+        // We are using RETURN with a high priority to ensure that we are *LAST* and can also modify commands which
         // don't use Fabric API
         ConfigManager.REQUIREMENT_MODIFICATIONS.forEach((path, requirementModification) -> {
             CommandNode<CommandSourceStack> node = dispatcher.findNode(List.of(requirementModification.commandPath.split("\\.")));

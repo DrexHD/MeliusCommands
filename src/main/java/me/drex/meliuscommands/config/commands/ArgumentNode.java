@@ -27,11 +27,11 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
         String[] splits = type.split(" ", 2);
         String type = splits[0];
         String args = splits.length > 1 ? splits[1] : "";
-        ResourceLocation location = new ResourceLocation(type);
+        ResourceLocation resourceLocation = new ResourceLocation(type);
         for (ArgumentTypeParser parser : PARSERS) {
-            if (parser.canParse(location.getNamespace(), location.getPath())) {
+            if (parser.canParse(resourceLocation)) {
                 @SuppressWarnings("unchecked")
-                ArgumentType<T> parse = (ArgumentType<T>) parser.parse(context, location.getNamespace(), location.getPath(), args);
+                ArgumentType<T> parse = (ArgumentType<T>) parser.parse(context, resourceLocation, args);
                 return parse;
             }
         }

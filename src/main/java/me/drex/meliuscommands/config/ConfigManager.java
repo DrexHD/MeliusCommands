@@ -8,9 +8,7 @@ import me.drex.meliuscommands.CustomCommands;
 import me.drex.meliuscommands.config.commands.LiteralNode;
 import me.drex.meliuscommands.config.requirements.Requirement;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;

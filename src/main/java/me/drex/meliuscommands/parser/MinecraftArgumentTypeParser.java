@@ -30,56 +30,65 @@ import me.drex.meliuscommands.mixin.ArgumentTypesAccessor;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
 
     public static final MinecraftArgumentTypeParser INSTANCE = new MinecraftArgumentTypeParser();
+    private static final Map<ResourceLocation, ArgumentParserFunction> ARGUMENT_TYPE_PARSERS = Map.of(
+        new ResourceLocation("entity"), MinecraftArgumentTypeParser::parseEntityArgumentType,
+        new ResourceLocation("resource"), MinecraftArgumentTypeParser::parseResourceArgumentType,
+        new ResourceLocation("resource_key"), MinecraftArgumentTypeParser::parseResourceKeyArgumentType,
+        new ResourceLocation("resource_or_tag"), MinecraftArgumentTypeParser::parseResourceOrTagArgumentType,
+        new ResourceLocation("resource_or_tag_key"), MinecraftArgumentTypeParser::parseResourceOrTagKeyArgumentType,
+        new ResourceLocation("score_holder"), MinecraftArgumentTypeParser::parseScoreHolderArgumentType,
+        new ResourceLocation("time"), MinecraftArgumentTypeParser::parseTimeArgumentType
+    );
 
     private MinecraftArgumentTypeParser() {
     }
 
     @Override
-    public boolean canParse(String namespace, String name) {
-        if (namespace.equals("minecraft") && (name.equals("entity") || name.equals("score_holder"))) {
-            return true;
-        }
-
-        return isRegistered(new ResourceLocation(namespace, name));
+    public boolean canParse(ResourceLocation resourceLocation) {
+        return BuiltInRegistries.COMMAND_ARGUMENT_TYPE.get(resourceLocation) != null;
     }
 
     @Override
-    public ArgumentType<?> parse(CommandBuildContext context, String namespace, String name, String args) {
-        if (namespace.equals("minecraft")) {
-            if (name.equals("entity")) {
-                return parseEntityArgumentType(args);
-            }
-            if (name.equals("score_holder")) {
-                return parseScoreHolderArgumentType(args);
-            }
+    public ArgumentType<?> parse(CommandBuildContext context, ResourceLocation resourceLocation, String args) {
+        Class<? extends ArgumentType<?>> clazz = getClassByKey(resourceLocation);
+        ArgumentParserFunction parserFunction = ARGUMENT_TYPE_PARSERS.get(resourceLocation);
+        if (parserFunction != null) {
+            return parserFunction.parse(clazz, context, args);
         }
-
+        Constructor<? extends ArgumentType<?>> constructor;
+        Object[] arguments;
         try {
-            return getByKey(context, new ResourceLocation(namespace, name));
-        } catch (Throwable e) {
-            throw new IllegalArgumentException("Invalid key for argument type (not found in registry): " + namespace + ":" + name, e);
+            constructor = clazz.getDeclaredConstructor();
+            arguments = new Object[]{};
+        } catch (NoSuchMethodException noDefaultConstructor) {
+            try {
+                constructor = clazz.getDeclaredConstructor(CommandBuildContext.class);
+                arguments = new Object[]{context};
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        constructor.setAccessible(true);
+        try {
+            return constructor.newInstance(arguments);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private static ArgumentType<?> parseScoreHolderArgumentType(String args) {
-        boolean multiple = Boolean.parseBoolean(args);
-        return constructMinecraftArgumentType(new ResourceLocation("score_holder"), new Class[]{boolean.class}, multiple);
-    }
-
-    private ArgumentType<?> parseEntityArgumentType(String args) {
-
+    private static ArgumentType<?> parseEntityArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
         boolean single;
         boolean playersOnly;
-
         switch (args) {
             case "entity" -> {
                 single = true;
@@ -97,30 +106,51 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
                 single = false;
                 playersOnly = true;
             }
-            default -> throw new IllegalArgumentException("Unknown entity selection type: \"" + args + "\". Use entity, entities, player or players.");
+            default ->
+                throw new IllegalArgumentException("Unknown entity selection type: \"" + args + "\". Use entity, entities, player or players.");
         }
 
-        return constructMinecraftArgumentType(new ResourceLocation("entity"), new Class[]{boolean.class, boolean.class}, single, playersOnly);
+        return constructMinecraftArgumentType(clazz, new Class[]{boolean.class, boolean.class}, single, playersOnly);
     }
 
-    private static ArgumentType<?> constructMinecraftArgumentType(ResourceLocation key, Class<?>[] argTypes, Object... args) {
+    private static ArgumentType<?> parseResourceArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        ResourceLocation resourceLocation = new ResourceLocation(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{CommandBuildContext.class, ResourceKey.class}, context, ResourceKey.createRegistryKey(resourceLocation));
+    }
+
+    private static ArgumentType<?> parseResourceKeyArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        ResourceLocation resourceLocation = new ResourceLocation(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{ResourceKey.class}, ResourceKey.createRegistryKey(resourceLocation));
+    }
+
+    private static ArgumentType<?> parseResourceOrTagArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        ResourceLocation resourceLocation = new ResourceLocation(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{CommandBuildContext.class, ResourceKey.class}, context, ResourceKey.createRegistryKey(resourceLocation));
+    }
+
+    private static ArgumentType<?> parseResourceOrTagKeyArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        ResourceLocation resourceLocation = new ResourceLocation(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{ResourceKey.class}, ResourceKey.createRegistryKey(resourceLocation));
+    }
+
+    private static ArgumentType<?> parseScoreHolderArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        boolean multiple = Boolean.parseBoolean(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{boolean.class}, multiple);
+    }
+
+    private static ArgumentType<?> parseTimeArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        int minimum = Integer.parseInt(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{int.class}, minimum);
+    }
+
+    private static ArgumentType<?> constructMinecraftArgumentType(Class<? extends ArgumentType<?>> clazz, Class<?>[] argTypes, Object... args) {
         try {
-            final Constructor<? extends ArgumentType<?>> constructor = getClassByKey(key).getDeclaredConstructor(argTypes);
+            final Constructor<? extends ArgumentType<?>> constructor = clazz.getDeclaredConstructor(argTypes);
             constructor.setAccessible(true);
             return constructor.newInstance(args);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Gets if an argument is registered for the given resourceLocation.
-     *
-     * @param resourceLocation the resourceLocation
-     * @return if an argument is registered
-     */
-    public static boolean isRegistered(ResourceLocation resourceLocation) {
-        return BuiltInRegistries.COMMAND_ARGUMENT_TYPE.get(resourceLocation) != null;
     }
 
     /**
@@ -146,25 +176,9 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
         throw new IllegalArgumentException(resourceLocation.toString());
     }
 
-    /**
-     * Gets a registered argument type by key.
-     *
-     * @param resourceLocation the key
-     * @return the returned argument
-     * @throws IllegalArgumentException if no such argument is registered
-     */
-    public static ArgumentType<?> getByKey(CommandBuildContext context, ResourceLocation resourceLocation) throws IllegalArgumentException {
-        try {
-            Class<? extends ArgumentType<?>> classByKey = getClassByKey(resourceLocation);
-            for (Constructor<? > constructor : classByKey.getDeclaredConstructors()) {
-                constructor.setAccessible(true);
-                if (constructor.getParameterCount() == 0) return (ArgumentType<?>) constructor.newInstance();
-                return (ArgumentType<?>) constructor.newInstance(context);
-            }
-            throw new RuntimeException("Couldn't find appropriate constructor");
-        } catch (ReflectiveOperationException e) {
-            throw new RuntimeException(e);
-        }
+    @FunctionalInterface
+    interface ArgumentParserFunction {
+        ArgumentType<?> parse(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args);
     }
 
 }

@@ -27,6 +27,7 @@ package me.drex.meliuscommands.parser;
 
 import com.mojang.brigadier.arguments.*;
 import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 
@@ -38,20 +39,20 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
     }
 
     @Override
-    public boolean canParse(String namespace, String name) {
-        if (!namespace.equals("brigadier")) {
+    public boolean canParse(ResourceLocation resourceLocation) {
+        if (!resourceLocation.getNamespace().equals("brigadier")) {
             return false;
         }
 
-        return switch (name) {
+        return switch (resourceLocation.getPath()) {
             case "bool", "string", "integer", "long", "float", "double" -> true;
             default -> false;
         };
     }
 
     @Override
-    public ArgumentType<?> parse(CommandBuildContext context, String namespace, String name, String args) {
-        return switch (name) {
+    public ArgumentType<?> parse(CommandBuildContext context, ResourceLocation resourceLocation, String args) {
+        return switch (resourceLocation.getPath()) {
             case "bool" -> BoolArgumentType.bool();
             case "string" -> parseStringArgumentType(args);
             case "integer" -> parseIntegerArgumentType(args);
