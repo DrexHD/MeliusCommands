@@ -5,7 +5,7 @@ A fabric server side mod to create custom, and modify existing commands
 
 ## Custom Commands
 To add custom commands, create a json file in `./config/melius-commands/commands`.
-For example files, see [examples/commands](./examples/commands)!
+For example files, see [examples/commands](./examples/commands)! Apply your changes, by running `/reload` in-game.
 
 ### JSON Format
 Json format includes comments for clarification (don't copy `//` in your files)
