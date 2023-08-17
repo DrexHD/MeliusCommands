@@ -12,7 +12,7 @@
     "sources": "https://github.com/DrexHD/MeliusCommands"
   },
   "license": "MIT",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/meliuscommands/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

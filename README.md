@@ -1,4 +1,4 @@
-# MeliusCommands
+# Melius Commands
 [![Discord](https://img.shields.io/discord/904419828192927885.svg?logo=discord)](https://discord.gg/HeZayd6SxF)
 
 A fabric server side mod to create custom, and modify existing commands
