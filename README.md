@@ -43,7 +43,7 @@ The root node must always be a literal node.
 ```
 
 #### Argument Type
-For a full list of all argument types refer to the [Argument types wiki](https://minecraft.fandom.com/wiki/Argument_types).
+For a full list of all argument types refer to the [Argument types wiki](https://minecraft.wiki/w/Argument_types).
 Some argument types require additional arguments, which must be appended seperated by spaces.
 
 ## Command Requirements
