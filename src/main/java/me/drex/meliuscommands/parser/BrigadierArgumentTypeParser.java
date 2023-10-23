@@ -66,9 +66,9 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
     private static StringArgumentType parseStringArgumentType(String args) {
 
         return switch (args) {
-            case "single_word" -> StringArgumentType.word();
-            case "quotable_phrase" -> StringArgumentType.string();
-            case "greedy_phrase" -> StringArgumentType.greedyString();
+            case "word", "single_word" -> StringArgumentType.word();
+            case "phrase", "quotable_phrase" -> StringArgumentType.string();
+            case "greedy", "greedy_phrase" -> StringArgumentType.greedyString();
             default -> throw new IllegalArgumentException("Unknown string type: " + args);
         };
     }
