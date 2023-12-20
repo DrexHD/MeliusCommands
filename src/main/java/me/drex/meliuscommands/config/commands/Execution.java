@@ -32,7 +32,12 @@ public class Execution {
             String argumentValue = entry.getValue().getRange().get(ctx.getInput() + " ");
             command = command.replaceAll("\\$\\{" + entry.getKey() + "}", argumentValue);
         }
-        CommandSourceStack source = asConsole ? ctx.getSource().getServer().createCommandSourceStack() : ctx.getSource();
+        CommandSourceStack source;
+        if (asConsole) {
+            source = ctx.getSource().getServer().createCommandSourceStack().withEntity(ctx.getSource().getEntity());
+        } else {
+            source = ctx.getSource();
+        }
         if (opLevel != null) source = source.withMaximumPermission(opLevel);
         if (silent) source = source.withSuppressedOutput();
         return dispatcher.execute(command, source);
