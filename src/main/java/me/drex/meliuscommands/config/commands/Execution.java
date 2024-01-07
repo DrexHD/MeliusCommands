@@ -30,7 +30,7 @@ public class Execution {
         String command = this.command;
         for (Map.Entry<String, ParsedArgument<CommandSourceStack, ?>> entry : arguments.entrySet()) {
             String argumentValue = entry.getValue().getRange().get(ctx.getInput() + " ");
-            command = command.replaceAll("\\$\\{" + entry.getKey() + "}", argumentValue);
+            command = command.replace("${" + entry.getKey() + "}", argumentValue);
         }
         CommandSourceStack source;
         if (asConsole) {
