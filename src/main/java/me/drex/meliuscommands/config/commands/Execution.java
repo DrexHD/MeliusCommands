@@ -41,7 +41,8 @@ public class Execution {
         if (opLevel != null) source = source.withMaximumPermission(opLevel);
         if (silent) source = source.withSuppressedOutput();
         AtomicInteger result = new AtomicInteger();
-        source.withCallback((bl, i) -> {
+
+        source.withCallback((context, bl, i) -> {
             result.getAndIncrement();
         });
         ctx.getSource().getServer().getCommands().performPrefixedCommand(source, command);
