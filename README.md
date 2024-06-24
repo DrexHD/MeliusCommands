@@ -11,6 +11,9 @@ For example files, see [examples/commands](./examples/commands)! Apply your chan
 Json format includes comments for clarification (don't copy `//` in your files)
 
 #### Command node (literal / argument)
+Check out the [online generator](https://drexhd.vercel.app/melius-commands/commands/) to create your custom commands 
+quick and easy! This will also make sure your syntax is valid.
+
 The root node must always be a literal node.
 ```json5
 {
@@ -33,6 +36,8 @@ The root node must always be a literal node.
 ```
 
 #### Execution
+This can either be a simple string, which will be executed silent, as console with op level 4 or manually configured 
+like this:
 ```json5
 {
   "command": "...", // The command that will be executed (can reference argument values, with ${id})
@@ -46,21 +51,27 @@ The root node must always be a literal node.
 For a full list of all argument types refer to the [Argument types wiki](https://minecraft.wiki/w/Argument_types).
 Some argument types require additional arguments, which must be appended seperated by spaces.
 
-## Command Requirements
-To add command requirements, create a json file in `./config/melius-commands/requirements`.
-For example files, see [examples/requirements](./examples/requirements)!
+## Command Modifiers
+To add command requirements, create a json file in `./config/melius-commands/modifiers`.
+For example files, see [examples/modifiers](./examples/modifiers)!
 
 ### JSON Format
+Check out the [online generator](https://drexhd.vercel.app/melius-commands/modifiers/) to create your custom command
+modifiers quick and easy! This will also make sure your syntax is valid.
 
 Json format includes comments for clarification (don't copy `//` in your files)
-#### Command requirement
+#### Command modifier
 
-```json5
-{
-  "command_path": "...", // Command path (a . seperated string of all command node ids) of the modified command
-  "replace": true, // Whether the original requirements should be replaced or added
-  "require": {
-    // See https://github.com/Patbox/PredicateAPI/ for further information.
-  }
-}
-```
+The syntax depends on the modifier type you choose. The most important thing to note is that there are two types of 
+command matchers:
+- Node matchers will match command nodes (the structure used by brigadier to represent commands internally) by their 
+path (for example `teleport.location`, will match any command like this `/teleport 0 100 0`)
+- Command matchers will match against the string used during command execution (for example `warp end` will match `/warp end`)
+
+Both of these types come with three different flavours:
+- `strict` modifiers will only be applied to that exact node / that exact command input
+- `starts_with` modifiers will be applied to the specified node / command and anything that is "longer" than it
+- `regex` modifiers will be applied to everything matching the regular expression
+
+Node matchers have an extra field called `requirement_modifier`, which allows you to modify the requirement of the node,
+which will completely remove the command from players / command sources that don't meet the requirement!

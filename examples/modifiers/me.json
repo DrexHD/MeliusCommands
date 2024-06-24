@@ -1,0 +1,12 @@
+{
+  "type": "node:starts_with",
+  "paths": "me",
+  "requirement_modifier": {
+    "type": "requirement:replace",
+    "predicate": {
+      "type": "permission",
+      "permission": "minecraft.me",
+      "operator": 2
+    }
+  }
+}

@@ -1,17 +1,18 @@
+import org.jetbrains.changelog.Changelog
+
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
-	id 'maven-publish'
+	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id "me.modmuss50.mod-publish-plugin" version "0.+"
+	id 'org.jetbrains.changelog' version '2.+'
 }
 
 sourceCompatibility = JavaVersion.VERSION_21
 targetCompatibility = JavaVersion.VERSION_21
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = "${mod_version}+${minecraft_version}"
 group = project.maven_group
 
 repositories {
-	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' } // fabric-permissions-api
 	maven { url 'https://maven.nucleoid.xyz' }
 }
 
@@ -25,8 +26,6 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation include("eu.pb4:predicate-api:${project.predicate_api_version}")
-	modImplementation "me.lucko:fabric-permissions-api:${project.permission_api_version}"
-
 }
 
 processResources {
@@ -54,19 +53,38 @@ jar {
 	}
 }
 
-// configure the maven publication
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-		}
+publishMods {
+	file = remapJar.archiveFile
+	changelog = fetchChangelog()
+	type = BETA
+	displayName = "PerPlayerWanderingTraders ${version.get()}"
+	modLoaders.add("fabric")
+	modLoaders.add("quilt")
+	modrinth {
+		projectId = "lCC4AmlO"
+		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+		minecraftVersions.add(project.minecraft_version)
 	}
+	curseforge {
+		projectId = "903910"
+		accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+		minecraftVersions.add(project.minecraft_version)
+	}
+	github {
+		accessToken = providers.environmentVariable("GITHUB_TOKEN")
+		repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/dryrun")
+		commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
+	}
+}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+private String fetchChangelog() {
+	def log = getChangelog.changelog.get()
+	if (log.has(project.mod_version)) {
+		return log.renderItem(
+				log.get(project.mod_version).withHeader(false),
+				Changelog.OutputType.MARKDOWN
+		)
+	} else {
+		return ""
 	}
 }

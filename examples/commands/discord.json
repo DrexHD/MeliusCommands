@@ -1,9 +1,6 @@
 {
 	"id": "discord",
 	"executes": [
-		{
-			"command": "tellraw @s [{\"text\":\"DISCORD: \",\"bold\":true,\"color\":\"blue\"},{\"text\":\"discord.gg\/example\",\"italic\":true,\"bold\":false,\"color\":\"gray\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https:\/\/discord.com\/invite\/example\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[{\"text\":\"Click to join!\",\"color\":\"aqua\"}]}}]",
-			"op_level": 2
-		}
+		"tellraw @s [{\"text\":\"DISCORD: \",\"bold\":true,\"color\":\"blue\"},{\"text\":\"discord.gg\/example\",\"italic\":true,\"bold\":false,\"color\":\"gray\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https:\/\/discord.com\/invite\/example\"},\"hoverEvent\":{\"action\":\"show_text\",\"contents\":[{\"text\":\"Click to join!\",\"color\":\"aqua\"}]}}]"
 	]
 }

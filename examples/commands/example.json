@@ -13,30 +13,16 @@
 					"id": "targets",
 					"type": "minecraft:entity players",
 					"executes": [
-						{
-							"command": "tellraw ${targets} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
-							"as_console": true
-						},
-						{
-							"command": "give ${targets} apple",
-							"as_console": true,
-							"silent": true
-						}
+						"tellraw ${targets} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
+						"give ${targets} apple"
 					],
 					"arguments": [
 						{
 							"id": "count",
 							"type": "brigadier:integer 1 64",
 							"executes": [
-								{
-									"command": "tellraw ${targets} {\"text\":\"You have been rewarded ${count} apples!\",\"italic\":true,\"color\":\"gray\"}",
-									"as_console": true
-								},
-								{
-									"command": "give ${targets} apple ${count}",
-									"as_console": true,
-									"silent": true
-								}
+								"tellraw ${targets} {\"text\":\"You have been rewarded ${count} apples!\",\"italic\":true,\"color\":\"gray\"}",
+								"give ${targets} apple ${count}"
 							]
 						}
 					]
@@ -54,42 +40,15 @@
 							"id": "second_block",
 							"type": "minecraft:block_state",
 							"executes": [
-								{
-									"command": "setblock ~ ~-1 ~ ${first_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~1 ~-1 ~ ${second_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~-1 ~-1 ~ ${second_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~ ~-1 ~1 ${second_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~ ~-1 ~-1 ${second_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~1 ~-1 ~1 ${first_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~1 ~-1 ~-1 ${first_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~-1 ~-1 ~1 ${first_block}",
-									"silent": true
-								},
-								{
-									"command": "setblock ~-1 ~-1 ~-1 ${first_block}",
-									"silent": true
-								}
+								"setblock ~ ~-1 ~ ${first_block}",
+								"setblock ~1 ~-1 ~ ${second_block}",
+								"setblock ~-1 ~-1 ~ ${second_block}",
+								"setblock ~ ~-1 ~1 ${second_block}",
+								"setblock ~ ~-1 ~-1 ${second_block}",
+								"setblock ~1 ~-1 ~1 ${first_block}",
+								"setblock ~1 ~-1 ~-1 ${first_block}",
+								"setblock ~-1 ~-1 ~1 ${first_block}",
+								"setblock ~-1 ~-1 ~-1 ${first_block}"
 							]
 						}
 					]

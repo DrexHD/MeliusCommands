@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CustomCommands implements ModInitializer {
+public class MeliusCommands implements ModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("melius-commands");
 

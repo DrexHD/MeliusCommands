@@ -1,0 +1,11 @@
+{
+  "type": "node:regex",
+  "regexes": ".*",
+  "requirement_modifier": {
+    "type": "requirement:replace",
+    "predicate": {
+      "type": "operator",
+      "operator": 5
+    }
+  }
+}

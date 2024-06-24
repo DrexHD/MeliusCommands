@@ -1,9 +1,0 @@
-{
-  "command_path": "me",
-  "replace": true,
-  "require": {
-    "type": "permission",
-    "permission": "minecraft.me",
-    "operator": 2
-  }
-}

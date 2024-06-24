@@ -7,7 +7,9 @@
     "ArgumentTypesAccessor",
     "CommandContextAccessor",
     "CommandNodeAccessor",
-    "CommandsMixin"
+    "CommandsMixin",
+    "CommandSourceStackAccessor",
+    "modifier.ContextChainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,20 @@
+{
+	"type": "node:strict",
+	"paths": ["discord","gamemode.gamemode"],
+	"execution_modifiers": [
+		{
+			"type": "predicate:add",
+			"predicate": {
+				"type": "entity",
+				"value": {
+					"location": {
+						"dimension": "minecraft:overworld"
+					}
+				}
+			},
+			"failure": [
+				"tellraw @s [{\"text\":\"You need to be in the overworld, to join our discord (or set your own gamemode)!\",\"bold\":true,\"color\":\"red\"}]"
+			]
+		}
+	]
+}

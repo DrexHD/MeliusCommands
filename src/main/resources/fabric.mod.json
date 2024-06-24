@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.drex.meliuscommands.CustomCommands"
+      "me.drex.meliuscommands.MeliusCommands"
     ]
   },
   "mixins": [

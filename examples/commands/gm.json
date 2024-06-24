@@ -9,33 +9,25 @@
     {
       "id": "0",
       "executes": [
-        {
-          "command": "gamemode survival"
-        }
+        "gamemode survival"
       ]
     },
     {
       "id": "1",
       "executes": [
-        {
-          "command": "gamemode creative"
-        }
+        "gamemode creative"
       ]
     },
     {
       "id": "2",
       "executes": [
-        {
-          "command": "gamemode adventure"
-        }
+        "gamemode adventure"
       ]
     },
     {
       "id": "3",
       "executes": [
-        {
-          "command": "gamemode spectator"
-        }
+        "gamemode spectator"
       ]
     }
   ]
