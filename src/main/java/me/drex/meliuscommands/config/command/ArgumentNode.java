@@ -49,7 +49,7 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
         String[] splits = type.split(" ", 2);
         String type = splits[0];
         String args = splits.length > 1 ? splits[1] : "";
-        ResourceLocation resourceLocation = new ResourceLocation(type);
+        ResourceLocation resourceLocation = ResourceLocation.parse(type);
         for (ArgumentTypeParser parser : PARSERS) {
             if (parser.canParse(resourceLocation)) {
                 @SuppressWarnings("unchecked")

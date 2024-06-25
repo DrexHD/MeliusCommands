@@ -41,13 +41,13 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
 
     public static final MinecraftArgumentTypeParser INSTANCE = new MinecraftArgumentTypeParser();
     private static final Map<ResourceLocation, ArgumentParserFunction> ARGUMENT_TYPE_PARSERS = Map.of(
-        new ResourceLocation("entity"), MinecraftArgumentTypeParser::parseEntityArgumentType,
-        new ResourceLocation("resource"), MinecraftArgumentTypeParser::parseResourceArgumentType,
-        new ResourceLocation("resource_key"), MinecraftArgumentTypeParser::parseResourceKeyArgumentType,
-        new ResourceLocation("resource_or_tag"), MinecraftArgumentTypeParser::parseResourceOrTagArgumentType,
-        new ResourceLocation("resource_or_tag_key"), MinecraftArgumentTypeParser::parseResourceOrTagKeyArgumentType,
-        new ResourceLocation("score_holder"), MinecraftArgumentTypeParser::parseScoreHolderArgumentType,
-        new ResourceLocation("time"), MinecraftArgumentTypeParser::parseTimeArgumentType
+        ResourceLocation.withDefaultNamespace("entity"), MinecraftArgumentTypeParser::parseEntityArgumentType,
+        ResourceLocation.withDefaultNamespace("resource"), MinecraftArgumentTypeParser::parseResourceArgumentType,
+        ResourceLocation.withDefaultNamespace("resource_key"), MinecraftArgumentTypeParser::parseResourceKeyArgumentType,
+        ResourceLocation.withDefaultNamespace("resource_or_tag"), MinecraftArgumentTypeParser::parseResourceOrTagArgumentType,
+        ResourceLocation.withDefaultNamespace("resource_or_tag_key"), MinecraftArgumentTypeParser::parseResourceOrTagKeyArgumentType,
+        ResourceLocation.withDefaultNamespace("score_holder"), MinecraftArgumentTypeParser::parseScoreHolderArgumentType,
+        ResourceLocation.withDefaultNamespace("time"), MinecraftArgumentTypeParser::parseTimeArgumentType
     );
 
     private MinecraftArgumentTypeParser() {
@@ -114,22 +114,22 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
     }
 
     private static ArgumentType<?> parseResourceArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = new ResourceLocation(args);
+        ResourceLocation resourceLocation = ResourceLocation.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{CommandBuildContext.class, ResourceKey.class}, context, ResourceKey.createRegistryKey(resourceLocation));
     }
 
     private static ArgumentType<?> parseResourceKeyArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = new ResourceLocation(args);
+        ResourceLocation resourceLocation = ResourceLocation.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{ResourceKey.class}, ResourceKey.createRegistryKey(resourceLocation));
     }
 
     private static ArgumentType<?> parseResourceOrTagArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = new ResourceLocation(args);
+        ResourceLocation resourceLocation = ResourceLocation.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{CommandBuildContext.class, ResourceKey.class}, context, ResourceKey.createRegistryKey(resourceLocation));
     }
 
     private static ArgumentType<?> parseResourceOrTagKeyArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = new ResourceLocation(args);
+        ResourceLocation resourceLocation = ResourceLocation.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{ResourceKey.class}, ResourceKey.createRegistryKey(resourceLocation));
     }
 

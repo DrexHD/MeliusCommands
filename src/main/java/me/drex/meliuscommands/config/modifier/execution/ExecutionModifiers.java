@@ -12,7 +12,7 @@ public class ExecutionModifiers {
 
     public static final Codec<ExecutionModifier> CODEC = ExecutionModifierType.TYPE_CODEC.dispatch(ExecutionModifier::getType, ExecutionModifierType::codec);
 
-    public static final ExecutionModifierType<AddPredicateModifier> ADD_PREDICATE = ExecutionModifierType.create(new ResourceLocation("predicate", "add"), AddPredicateModifier.CODEC);
+    public static final ExecutionModifierType<AddPredicateModifier> ADD_PREDICATE = ExecutionModifierType.create(ResourceLocation.fromNamespaceAndPath("predicate", "add"), AddPredicateModifier.CODEC);
     // TODO CooldownModifier
 
     static {
