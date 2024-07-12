@@ -31,7 +31,9 @@ The root node must always be a literal node.
   ],
   "arguments": [
     // A list of argument children nodes
-  ]
+  ],
+  "redirect": "..." // If specified the command will copy execution, requirements and children from the specified node.
+  // This can effectively create an alias for another command
 }
 ```
 

@@ -12,6 +12,7 @@ Reworked command configuration _(backwards compatible)_ and replaced command req
 
 ### Added
 - Command modifiers
+- Command node redirects
 
 ### Removed
 - Command requirements

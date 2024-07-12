@@ -2,6 +2,7 @@ package me.drex.meliuscommands.mixin;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.tree.CommandNode;
+import me.drex.meliuscommands.MeliusCommands;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.node.NodeMatcher;
@@ -26,6 +27,14 @@ public class CommandsMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onRegister(Commands.CommandSelection commandSelection, CommandBuildContext commandBuildContext, CallbackInfo ci) {
+        ConfigManager.CUSTOM_COMMANDS.forEach((path, literalNode) -> {
+            try {
+                dispatcher.register(literalNode.build(dispatcher, commandBuildContext));
+            } catch (Exception exception) {
+                MeliusCommands.LOGGER.error("Failed to register command {}", path.getFileName(), exception);
+            }
+        });
+
         // We are using RETURN with a high priority to ensure that we are *LAST* and can also modify commands which
         // don't use Fabric API
         for (CommandMatcher commandMatcher : ConfigManager.COMMAND_EXECUTION_MATCHERS) {

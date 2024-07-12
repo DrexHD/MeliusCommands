@@ -13,6 +13,7 @@ import net.minecraft.commands.Commands;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class LiteralNode extends CommandNode<LiteralArgumentBuilder<CommandSourceStack>> {
 
@@ -21,12 +22,13 @@ public class LiteralNode extends CommandNode<LiteralArgumentBuilder<CommandSourc
             Codec.STRING.fieldOf("id").forGetter(node -> node.id),
             literalCodec.listOf().optionalFieldOf("literals", Collections.emptyList()).forGetter(node -> node.literals),
             ArgumentNode.CODEC.listOf().optionalFieldOf("arguments", Collections.emptyList()).forGetter(node -> node.arguments),
-            PredicateRegistry.CODEC.optionalFieldOf("require", BuiltinPredicates.operatorLevel(0)).forGetter(node -> node.requires),
-            CommandAction.CODEC.listOf().optionalFieldOf("executes", Collections.emptyList()).forGetter(node -> node.executions)
+            PredicateRegistry.CODEC.optionalFieldOf("require").forGetter(node -> node.requires),
+            CommandAction.CODEC.listOf().optionalFieldOf("executes", Collections.emptyList()).forGetter(node -> node.executions),
+            Codec.STRING.optionalFieldOf("redirect").forGetter(node -> node.redirect)
         ).apply(instance, LiteralNode::new))));
 
-    protected LiteralNode(String id, List<LiteralNode> literals, List<ArgumentNode<?>> arguments, MinecraftPredicate require, List<CommandAction> actions) {
-        super(id, literals, arguments, require, actions);
+    protected LiteralNode(String id, List<LiteralNode> literals, List<ArgumentNode<?>> arguments, Optional<MinecraftPredicate> require, List<CommandAction> actions, Optional<String> redirect) {
+        super(id, literals, arguments, require, actions, redirect);
     }
 
     @Override

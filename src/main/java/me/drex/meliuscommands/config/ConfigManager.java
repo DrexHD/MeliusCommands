@@ -5,13 +5,14 @@ import com.google.gson.JsonParseException;
 import com.google.gson.internal.Streams;
 import com.google.gson.stream.JsonReader;
 import com.mojang.serialization.JsonOps;
-import eu.pb4.predicate.api.PredicateRegistry;
 import me.drex.meliuscommands.MeliusCommands;
 import me.drex.meliuscommands.config.command.LiteralNode;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatchers;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.resources.ResourceLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,19 +31,10 @@ public class ConfigManager {
     private static final Path MAIN_FOLDER = FabricLoader.getInstance().getConfigDir().resolve("melius-commands");
 
     public static final List<CommandMatcher> COMMAND_EXECUTION_MATCHERS = new LinkedList<>();
-    private static final Map<Path, LiteralNode> CUSTOM_COMMANDS = new HashMap<>();
+    public static final Map<Path, LiteralNode> CUSTOM_COMMANDS = new HashMap<>();
 
     public static void init() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> {
-            load();
-            CUSTOM_COMMANDS.forEach((path, literalNode) -> {
-                try {
-                    dispatcher.register(literalNode.build(context));
-                } catch (Exception exception) {
-                    MeliusCommands.LOGGER.error("Failed to register command {}", path.getFileName(), exception);
-                }
-            });
-        });
+        CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> load());
     }
 
     public static void load() {

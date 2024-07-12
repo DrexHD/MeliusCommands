@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<CommandSourceStack, T>> {
 
@@ -29,14 +30,16 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
             Codec.STRING.fieldOf("type").forGetter(node -> node.type),
             LiteralNode.CODEC.listOf().optionalFieldOf("literals", Collections.emptyList()).forGetter(node -> node.literals),
             argumentCodec.listOf().optionalFieldOf("arguments", Collections.emptyList()).forGetter(node -> node.arguments),
-            PredicateRegistry.CODEC.optionalFieldOf("require", BuiltinPredicates.operatorLevel(0)).forGetter(node -> node.requires),
-            CommandAction.CODEC.listOf().optionalFieldOf("executes", Collections.emptyList()).forGetter(node -> node.executions)
+            PredicateRegistry.CODEC.optionalFieldOf("require").forGetter(node -> node.requires),
+            CommandAction.CODEC.listOf().optionalFieldOf("executes", Collections.emptyList()).forGetter(node -> node.executions),
+            Codec.STRING.optionalFieldOf("redirect").forGetter(node -> node.redirect)
+
         ).apply(instance, ArgumentNode::new))));
 
     private static final ArgumentTypeParser[] PARSERS = new ArgumentTypeParser[]{BrigadierArgumentTypeParser.INSTANCE, MinecraftArgumentTypeParser.INSTANCE};
 
-    protected ArgumentNode(String id, String type, List<LiteralNode> literals, List<ArgumentNode<?>> arguments, MinecraftPredicate require, List<CommandAction> actions) {
-        super(id, literals, arguments, require, actions);
+    protected ArgumentNode(String id, String type, List<LiteralNode> literals, List<ArgumentNode<?>> arguments, Optional<MinecraftPredicate> require, List<CommandAction> actions, Optional<String> redirect) {
+        super(id, literals, arguments, require, actions, redirect);
         this.type = type;
     }
 
