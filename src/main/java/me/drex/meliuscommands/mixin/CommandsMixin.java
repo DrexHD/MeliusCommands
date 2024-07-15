@@ -39,20 +39,23 @@ public class CommandsMixin {
         // don't use Fabric API
         for (CommandMatcher commandMatcher : ConfigManager.COMMAND_EXECUTION_MATCHERS) {
             if (commandMatcher instanceof NodeMatcher nodeMatcher && nodeMatcher.requirementModifier().isPresent()) {
-                melius_commands$modifyCommandNode(nodeMatcher.requirementModifier().get(), dispatcher.getRoot());
+                melius_commands$modifyCommandNode(nodeMatcher, nodeMatcher.requirementModifier().get(), dispatcher.getRoot());
             }
         }
     }
 
     @Unique
-    private static void melius_commands$modifyCommandNode(RequirementModifier requirementModifier, CommandNode<CommandSourceStack> node) {
-        Predicate<CommandSourceStack> originalRequirement = node.getRequirement();
-        //noinspection unchecked
-        ((CommandNodeAccessor<CommandSourceStack>) node).setRequirement(
-            requirementModifier.apply(originalRequirement)
-                .or(source -> ((CommandSourceStackAccessor)source).getSource() == source.getServer())); // Console should always be able to execute commands
+    private void melius_commands$modifyCommandNode(NodeMatcher nodeMatcher, RequirementModifier requirementModifier, CommandNode<CommandSourceStack> node) {
+        String path = String.join(".", dispatcher.getPath(node));
+        if (nodeMatcher.matches(path)) {
+            Predicate<CommandSourceStack> originalRequirement = node.getRequirement();
+            //noinspection unchecked
+            ((CommandNodeAccessor<CommandSourceStack>) node).setRequirement(
+                requirementModifier.apply(originalRequirement)
+                    .or(source -> ((CommandSourceStackAccessor)source).getSource() == source.getServer())); // Console should always be able to execute commands
+        }
         for (CommandNode<CommandSourceStack> child : node.getChildren()) {
-            melius_commands$modifyCommandNode(requirementModifier, child);
+            melius_commands$modifyCommandNode(nodeMatcher, requirementModifier, child);
         }
     }
 }
