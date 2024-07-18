@@ -20,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Predicate;
 
+import static me.drex.meliuscommands.MeliusCommands.IS_CONSOLE;
+
 @Mixin(value = Commands.class, priority = 1500)
 public class CommandsMixin {
 
@@ -52,7 +54,7 @@ public class CommandsMixin {
             //noinspection unchecked
             ((CommandNodeAccessor<CommandSourceStack>) node).setRequirement(
                 requirementModifier.apply(originalRequirement)
-                    .or(source -> ((CommandSourceStackAccessor)source).getSource() == source.getServer())); // Console should always be able to execute commands
+                    .or(IS_CONSOLE)); // Console should always be able to execute commands
         }
         for (CommandNode<CommandSourceStack> child : node.getChildren()) {
             melius_commands$modifyCommandNode(nodeMatcher, requirementModifier, child);

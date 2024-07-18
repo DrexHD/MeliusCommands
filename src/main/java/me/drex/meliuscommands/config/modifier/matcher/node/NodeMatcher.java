@@ -1,10 +1,15 @@
 package me.drex.meliuscommands.config.modifier.matcher.node;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.context.ParsedCommandNode;
+import me.drex.meliuscommands.MeliusCommands;
+import me.drex.meliuscommands.commands.MeliusCommandsCommand;
 import me.drex.meliuscommands.config.modifier.requirement.RequirementModifier;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import net.minecraft.commands.CommandSourceStack;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface NodeMatcher extends CommandMatcher {
@@ -14,7 +19,11 @@ public interface NodeMatcher extends CommandMatcher {
 
     @Override
     default boolean matches(CommandContext<CommandSourceStack> context) {
-        String path = String.join(".", context.getNodes().stream().map(parsedNode -> parsedNode.getNode().getName()).toList());
+        CommandContext<CommandSourceStack> lastChild = context.getLastChild();
+        CommandDispatcher<CommandSourceStack> dispatcher = context.getSource().getServer().getCommands().getDispatcher();
+        List<ParsedCommandNode<CommandSourceStack>> nodes = lastChild.getNodes();
+        assert !nodes.isEmpty();
+        String path = String.join(".", dispatcher.getPath(nodes.get(nodes.size() - 1).getNode()));
         return matches(path);
     }
 }

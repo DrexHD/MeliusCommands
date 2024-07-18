@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ContextChain;
+import com.mojang.brigadier.tree.CommandNode;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.execution.ExecutionModifier;
@@ -30,11 +31,6 @@ public abstract class ContextChainMixin {
         if (!(src instanceof CommandSourceStack source)) {
             return original.call(command, ctx);
         }
-        // Make sure this is a minecraft command
-        if (!source.getServer().getCommands().getDispatcher().getRoot().equals(ctx.getRootNode())) {
-            return original.call(command, ctx);
-        }
-
         //noinspection unchecked
         CommandContext<CommandSourceStack> context = (CommandContext<CommandSourceStack>) ctx;
 
@@ -56,7 +52,6 @@ public abstract class ContextChainMixin {
             }
         }
         return original.call(command, ctx);
-
     }
 
 }
