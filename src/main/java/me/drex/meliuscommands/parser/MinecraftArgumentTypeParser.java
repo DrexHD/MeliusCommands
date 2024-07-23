@@ -29,6 +29,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import me.drex.meliuscommands.mixin.ArgumentTypesAccessor;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -73,16 +74,20 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
         } catch (NoSuchMethodException noDefaultConstructor) {
             try {
                 constructor = clazz.getDeclaredConstructor(CommandBuildContext.class);
-                arguments = new Object[]{context};
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
+            } catch (NoSuchMethodException noCommandBuildContextConstructor) {
+                try {
+                    constructor = clazz.getDeclaredConstructor(HolderLookup.Provider.class);
+                } catch (NoSuchMethodException noHolderLookupConstructor) {
+                    throw new RuntimeException("Failed to find constructor for argument type " + resourceLocation + ".", noHolderLookupConstructor);
+                }
             }
+            arguments = new Object[]{context};
         }
         constructor.setAccessible(true);
         try {
             return constructor.newInstance(arguments);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to construct argument type " + resourceLocation + ".", e);
         }
     }
 
