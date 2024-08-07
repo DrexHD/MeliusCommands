@@ -3,6 +3,8 @@ package me.drex.meliuscommands;
 import me.drex.meliuscommands.commands.MeliusCommandsCommand;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.mixin.CommandSourceStackAccessor;
+import me.drex.meliuscommands.util.CooldownManager;
+import me.drex.meliuscommands.util.PlaceholderManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -14,6 +16,7 @@ import java.util.function.Predicate;
 
 public class MeliusCommands implements ModInitializer {
 
+    public static final String MOD_ID = "melius-commands";
     public static final Logger LOGGER = LoggerFactory.getLogger("melius-commands");
     public static final Predicate<CommandSourceStack> IS_CONSOLE = source -> ((CommandSourceStackAccessor) source).getSource() == source.getServer();
 
@@ -28,6 +31,8 @@ public class MeliusCommands implements ModInitializer {
             MeliusCommandsCommand.register(dispatcher);
         });
         ConfigManager.init();
+        CooldownManager.init();
+        PlaceholderManager.init();
     }
 
 }

@@ -26,6 +26,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation include("eu.pb4:predicate-api:${project.predicate_api_version}")
+	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 }
 
 processResources {

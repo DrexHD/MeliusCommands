@@ -51,6 +51,14 @@ public abstract class ContextChainMixin {
                 }
             }
         }
+        for (CommandMatcher executionMatcher : ConfigManager.COMMAND_EXECUTION_MATCHERS) {
+            if (!executionMatcher.matches(context)) {
+                continue;
+            }
+            for (ExecutionModifier executionModifier : executionMatcher.executionModifiers()) {
+                executionModifier.onSuccess(context);
+            }
+        }
         return original.call(command, ctx);
     }
 

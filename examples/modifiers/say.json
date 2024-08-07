@@ -1,0 +1,14 @@
+{
+	"type": "node:starts_with",
+	"paths": "say",
+	"execution_modifiers": [
+		{
+			"type": "cooldown:set",
+			"id": "test",
+			"seconds": 30,
+			"failure": [
+				"tellform @s <red>You need to wait %melius-commands:cooldown test ss \\'seconds\\'% to use this command again!"
+			]
+		}
+	]
+}

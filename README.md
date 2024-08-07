@@ -4,6 +4,12 @@
 
 A fabric server side mod to create custom, and modify existing commands
 
+## Placeholders
+- `%melius-commands:cooldown [id]%` / `%melius-commands:cooldown [id] [formatting]%` - Player command cooldowns.
+  - `[id]` is the id specified in the cooldown modifier. 
+  - `[formatting]` is the [duration formatting](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html), 
+  make sure to escape properly.   
+
 ## Custom Commands
 
 To add custom commands, create a json file in `./config/melius-commands/commands`.
