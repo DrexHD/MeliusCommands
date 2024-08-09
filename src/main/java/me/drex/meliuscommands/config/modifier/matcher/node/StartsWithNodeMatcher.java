@@ -27,6 +27,7 @@ public record StartsWithNodeMatcher(List<String> paths, Optional<RequirementModi
         String[] parts = path.split("\\.");
         for (String lenientPath : paths) {
             String[] lenientParts = lenientPath.split("\\.");
+            if (lenientParts.length > parts.length) continue;
             boolean matches = true;
             for (int i = 0; i < lenientParts.length; i++) {
                 String lenientPart = lenientParts[i];

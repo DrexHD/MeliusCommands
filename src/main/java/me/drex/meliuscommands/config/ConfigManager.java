@@ -47,8 +47,8 @@ public class ConfigManager {
             LOGGER.error("Failed to create default folders", e);
         }
         CUSTOM_COMMANDS.clear();
-        try (Stream<Path> commandsPaths = Files.walk(commandsPath, 1)) {
-            commandsPaths.forEach(path -> {
+        try (Stream<Path> commandPaths = Files.walk(commandsPath, 1)) {
+            commandPaths.forEach(path -> {
                 if (Files.isDirectory(path)) return;
                 try (BufferedReader reader = Files.newBufferedReader(path)) {
                     JsonReader jsonReader = new JsonReader(reader);
@@ -68,8 +68,8 @@ public class ConfigManager {
         LOGGER.info("Loaded {} custom command", CUSTOM_COMMANDS.size());
 
         COMMAND_EXECUTION_MATCHERS.clear();
-        try (Stream<Path> requirementsPaths = Files.walk(modifiersPath, 1)) {
-            requirementsPaths.forEach(path -> {
+        try (Stream<Path> modifierPaths = Files.walk(modifiersPath, 1)) {
+            modifierPaths.forEach(path -> {
                 if (Files.isDirectory(path)) return;
                 try (BufferedReader reader = Files.newBufferedReader(path)) {
                     JsonReader jsonReader = new JsonReader(reader);
