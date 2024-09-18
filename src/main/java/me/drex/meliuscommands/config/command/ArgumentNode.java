@@ -24,7 +24,7 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
 
     public final String type;
 
-    public static final Codec<ArgumentNode<?>> CODEC = Codec.lazyInitialized(() -> Codec.recursive("Literal Node", argumentCodec -> RecordCodecBuilder.create(instance ->
+    public static final Codec<ArgumentNode<?>> CODEC = Codec.lazyInitialized(() -> Codec.recursive("Argument Node", argumentCodec -> RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.STRING.fieldOf("id").forGetter(node -> node.id),
             Codec.STRING.fieldOf("type").forGetter(node -> node.type),
