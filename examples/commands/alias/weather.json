@@ -1,0 +1,35 @@
+[
+  {
+    "id": "rain",
+    "require": {
+      "type": "permission",
+      "permission": "alias.rain",
+      "operator": 2
+    },
+    "executes": [
+      "weather rain"
+    ]
+  },
+  {
+    "id": "thunder",
+    "require": {
+      "type": "permission",
+      "permission": "alias.thunder",
+      "operator": 2
+    },
+    "executes": [
+      "weather thunder"
+    ]
+  },
+  {
+    "id": "sun",
+    "require": {
+      "type": "permission",
+      "permission": "alias.sun",
+      "operator": 2
+    },
+    "executes": [
+      "weather clear"
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "day",
+    "require": {
+      "type": "permission",
+      "permission": "alias.day",
+      "operator": 2
+    },
+    "executes": [
+      "time set day"
+    ]
+  },
+  {
+    "id": "night",
+    "require": {
+      "type": "permission",
+      "permission": "alias.night",
+      "operator": 2
+    },
+    "executes": [
+      "time set night"
+    ]
+  },
+  {
+    "id": "midnight",
+    "require": {
+      "type": "permission",
+      "permission": "alias.midnight",
+      "operator": 2
+    },
+    "executes": [
+      "time set midnight"
+    ]
+  },
+  {
+    "id": "noon",
+    "require": {
+      "type": "permission",
+      "permission": "alias.noon",
+      "operator": 2
+    },
+    "executes": [
+      "time set noon"
+    ]
+  }
+]
