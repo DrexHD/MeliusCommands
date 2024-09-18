@@ -1,0 +1,12 @@
+{
+	"id": "placeholders",
+	"arguments": [
+		{
+			"id": "player",
+			"type": "minecraft:entity players",
+			"executes": [
+				"say Hello ${player}, I'm ${player:displayname} and wearing ${player:equipment_slot head}! @s doesn't work in this context, so we use https://placeholders.pb4.eu/user/default-placeholders/"
+			]
+		}
+	]
+}

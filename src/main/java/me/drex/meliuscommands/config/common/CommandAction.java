@@ -4,15 +4,31 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import eu.pb4.placeholders.api.ParserContext;
+import eu.pb4.placeholders.api.PlaceholderContext;
+import eu.pb4.placeholders.api.node.DynamicTextNode;
+import eu.pb4.placeholders.api.parsers.NodeParser;
+import eu.pb4.placeholders.api.parsers.TagLikeParser;
 import me.drex.meliuscommands.mixin.CommandContextAccessor;
 import net.minecraft.commands.CommandResultCallback;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+
+import static eu.pb4.placeholders.api.parsers.TagLikeParser.PLACEHOLDER_USER;
 
 public record CommandAction(String command, boolean console, boolean silent, Optional<Integer> permissionLevel) {
+
+    private static final TagLikeParser.Format PLACEHOLDER_COMMAND = TagLikeParser.Format.of("${", "}", " ");
+    private static final ParserContext.Key<Function<String, Component>> ARGUMENTS = DynamicTextNode.key("melius_commands");
+    private static final NodeParser PARSER = NodeParser.builder()
+        .globalPlaceholders(PLACEHOLDER_COMMAND)
+        .placeholders(PLACEHOLDER_USER, ARGUMENTS)
+        .build();
 
     public CommandAction(String command) {
         this(command, true, true, Optional.of(4));
@@ -30,11 +46,13 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
     public int execute(CommandContext<CommandSourceStack> ctx) {
         @SuppressWarnings("unchecked")
         Map<String, ParsedArgument<CommandSourceStack, ?>> arguments = ((CommandContextAccessor<CommandSourceStack>) ctx).getArguments();
-        String modifiedCommand = command;
-        for (Map.Entry<String, ParsedArgument<CommandSourceStack, ?>> entry : arguments.entrySet()) {
-            String argumentValue = entry.getValue().getRange().get(ctx.getInput() + " ");
-            modifiedCommand = modifiedCommand.replace("${" + entry.getKey() + "}", argumentValue);
-        }
+        var parserContext = PlaceholderContext.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
+            var argument = arguments.get(input);
+            String value = argument.getRange().get(ctx.getInput() + " ");
+            return Component.literal(value);
+        });
+        String parsedCommand = PARSER.parseText(command, parserContext).getString();
+
         AtomicInteger result = new AtomicInteger();
 
         CommandSourceStack modifiedSource = ctx.getSource().withCallback((bl, i) -> {
@@ -50,7 +68,7 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
             modifiedSource = modifiedSource.withPermission(permissionLevel.get());
         }
 
-        ctx.getSource().getServer().getCommands().performPrefixedCommand(modifiedSource, modifiedCommand);
+        ctx.getSource().getServer().getCommands().performPrefixedCommand(modifiedSource, parsedCommand);
         return result.get();
     }
 

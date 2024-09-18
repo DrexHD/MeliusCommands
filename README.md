@@ -68,6 +68,10 @@ like this:
   // The operator level of the command source (optional) (Possible values: 0 - 4)
 }
 ```
+The `command` execution value can use placeholders from command arguments and 
+global placeholders, by using this format `${PLACEHOLDER}`, where `PLACEHOLDER` 
+can either be the argument id, or a global placeholder 
+like [player:name](https://placeholders.pb4.eu/user/default-placeholders/).
 
 #### Argument Type
 
