@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0] - 2024-06-23
+## [2.0.0+beta.1] - 2024-09-20
 
 Reworked command configuration _(backwards compatible)_ and replaced command requirements with a more powerful command modifier system
 

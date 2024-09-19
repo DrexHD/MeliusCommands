@@ -4,12 +4,6 @@
 
 A fabric server side mod to create custom, and modify existing commands
 
-## Placeholders
-- `%melius-commands:cooldown [id]%` / `%melius-commands:cooldown [id] [formatting]%` - Player command cooldowns.
-  - `[id]` is the id specified in the cooldown modifier. 
-  - `[formatting]` is the [duration formatting](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html), 
-  make sure to escape properly.   
-
 ## Custom Commands
 
 To add custom commands, create a json file in `./config/melius-commands/commands`.
@@ -115,3 +109,9 @@ You can use `/melius-commands path <cmd>` command to determine command node path
 Example: to check the path of `/tp DrexHD 0 100 0` (teleporting an entity to a block location) you type
 `/melius-commands path tp DrexHD 0 100 0` and will receive `teleport.targets.location`, which you can use in command
 modifiers.
+
+## Placeholders
+- `%melius-commands:cooldown [id]%` / `%melius-commands:cooldown [id] [formatting]%` - Player command cooldowns.
+  - `[id]` is the id specified in the cooldown modifier.
+  - `[formatting]` is the [duration formatting](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html),
+    make sure to escape properly.

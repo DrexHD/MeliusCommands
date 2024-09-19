@@ -58,7 +58,7 @@ publishMods {
 	file = remapJar.archiveFile
 	changelog = fetchChangelog()
 	type = BETA
-	displayName = "PerPlayerWanderingTraders ${version.get()}"
+	displayName = "MeliusCommands ${version.get()}"
 	modLoaders.add("fabric")
 	modLoaders.add("quilt")
 	modrinth {
