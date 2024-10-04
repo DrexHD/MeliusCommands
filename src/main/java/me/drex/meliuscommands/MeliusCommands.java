@@ -4,6 +4,7 @@ import me.drex.meliuscommands.commands.MeliusCommandsCommand;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.mixin.CommandSourceStackAccessor;
 import me.drex.meliuscommands.util.CooldownManager;
+import me.drex.meliuscommands.util.PathCache;
 import me.drex.meliuscommands.util.PlaceholderManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -26,6 +27,7 @@ public class MeliusCommands implements ModInitializer {
             server.getPlayerList().getPlayers().forEach(player ->
                 server.getCommands().sendCommands(player)
             );
+            PathCache.invalidate();
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             MeliusCommandsCommand.register(dispatcher);

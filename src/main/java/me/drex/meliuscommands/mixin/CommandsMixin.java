@@ -9,6 +9,7 @@ import me.drex.meliuscommands.config.command.LiteralNode;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.node.NodeMatcher;
 import me.drex.meliuscommands.config.modifier.requirement.RequirementModifier;
+import me.drex.meliuscommands.util.PathCache;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -19,13 +20,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
-import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static me.drex.meliuscommands.MeliusCommands.IS_CONSOLE;
 
@@ -67,7 +64,7 @@ public class CommandsMixin {
 
     @Unique
     private void melius_commands$modifyCommandNode(NodeMatcher nodeMatcher, RequirementModifier requirementModifier, CommandNode<CommandSourceStack> node) {
-        String path = String.join(".", dispatcher.getPath(node));
+        String path = PathCache.getPath(dispatcher, node);
         if (nodeMatcher.matches(path)) {
             Predicate<CommandSourceStack> originalRequirement = node.getRequirement();
             //noinspection unchecked

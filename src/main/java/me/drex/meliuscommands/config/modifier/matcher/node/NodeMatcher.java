@@ -3,10 +3,9 @@ package me.drex.meliuscommands.config.modifier.matcher.node;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedCommandNode;
-import me.drex.meliuscommands.MeliusCommands;
-import me.drex.meliuscommands.commands.MeliusCommandsCommand;
 import me.drex.meliuscommands.config.modifier.requirement.RequirementModifier;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
+import me.drex.meliuscommands.util.PathCache;
 import net.minecraft.commands.CommandSourceStack;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public interface NodeMatcher extends CommandMatcher {
         CommandDispatcher<CommandSourceStack> dispatcher = context.getSource().getServer().getCommands().getDispatcher();
         List<ParsedCommandNode<CommandSourceStack>> nodes = lastChild.getNodes();
         assert !nodes.isEmpty();
-        String path = String.join(".", dispatcher.getPath(nodes.get(nodes.size() - 1).getNode()));
+        String path = PathCache.getPath(dispatcher, nodes.get(nodes.size() - 1).getNode());
         return matches(path);
     }
 }
