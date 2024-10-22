@@ -57,7 +57,7 @@ jar {
 publishMods {
 	file = remapJar.archiveFile
 	changelog = fetchChangelog()
-	type = BETA
+	type = STABLE
 	displayName = "MeliusCommands ${version.get()}"
 	modLoaders.add("fabric")
 	modLoaders.add("quilt")
@@ -69,7 +69,7 @@ publishMods {
 	curseforge {
 		projectId = "903910"
 		accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
-		minecraftVersions.add(project.minecraft_version)
+		minecraftVersions.add(project.curseforge_minecraft_version)
 	}
 	github {
 		accessToken = providers.environmentVariable("GITHUB_TOKEN")
