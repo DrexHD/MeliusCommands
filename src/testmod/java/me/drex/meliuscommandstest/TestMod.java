@@ -15,6 +15,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class TestMod implements ModInitializer {
@@ -24,15 +26,16 @@ public class TestMod implements ModInitializer {
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             CommandBuildContext context = Commands.createValidationContext(VanillaRegistries.createLookup());
+            var parser = MinecraftArgumentTypeParser.INSTANCE;
+            Set<ResourceLocation> specialArguments = ((MinecraftArgumentTypeParserAccessor) parser).getARGUMENT_TYPE_PARSERS().keySet();
+
+            // Validate argument type parser
 
             BuiltInRegistries.COMMAND_ARGUMENT_TYPE.entrySet().forEach(entry -> {
-                ResourceKey<ArgumentTypeInfo<?, ?>> key = entry.getKey();
-                var resourceLocation = key.location();
+                var resourceLocation = entry.getKey().location();
                 try {
-                    var parser = MinecraftArgumentTypeParser.INSTANCE;
                     // These arguments already have special handling (that can still require changes, but this can't be
                     // tested automatically very easily)
-                    Set<ResourceLocation> specialArguments = ((MinecraftArgumentTypeParserAccessor) parser).getARGUMENT_TYPE_PARSERS().keySet();
                     if (specialArguments.contains(resourceLocation)) {
                         return;
                     }
@@ -48,6 +51,21 @@ public class TestMod implements ModInitializer {
                     LOGGER.error("Failed to parse: {}", resourceLocation, e);
                 }
             });
+            // Generate argument type list
+            LOGGER.info("Command argument list:");
+            List<String> out = new ArrayList<>();
+            BuiltInRegistries.COMMAND_ARGUMENT_TYPE.entrySet().forEach(entry -> {
+                var resourceLocation = entry.getKey().location();
+                if (specialArguments.contains(resourceLocation)) {
+                    return;
+                }
+                if (BrigadierArgumentTypeParser.INSTANCE.canParse(resourceLocation)) {
+                    return;
+                }
+                out.add("- `" + resourceLocation + "`");
+            });
+            out.sort(String::compareTo);
+            LOGGER.info("{}", String.join("\n", out));
         });
     }
 }

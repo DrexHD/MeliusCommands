@@ -69,7 +69,7 @@ like [player:name](https://placeholders.pb4.eu/user/default-placeholders/).
 
 #### Argument Type
 
-For a full list of all argument types refer to the [Argument types wiki](https://minecraft.wiki/w/Argument_types).
+For a full list of all argument types refer to [ARGUMENTS](ARGUMENTS.md).
 Some argument types require additional arguments, which must be appended seperated by spaces.
 
 ## Command Modifiers
