@@ -49,6 +49,7 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
         ResourceLocation.withDefaultNamespace("resource_or_tag_key"), MinecraftArgumentTypeParser::parseResourceOrTagKeyArgumentType,
         ResourceLocation.withDefaultNamespace("score_holder"), MinecraftArgumentTypeParser::parseScoreHolderArgumentType,
         ResourceLocation.withDefaultNamespace("time"), MinecraftArgumentTypeParser::parseTimeArgumentType,
+        ResourceLocation.withDefaultNamespace("vec2"), MinecraftArgumentTypeParser::parseVec2ArgumentType,
         ResourceLocation.withDefaultNamespace("vec3"), MinecraftArgumentTypeParser::parseVec3ArgumentType
     );
 
@@ -147,6 +148,11 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
     private static ArgumentType<?> parseTimeArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
         int minimum = Integer.parseInt(args);
         return constructMinecraftArgumentType(clazz, new Class[]{int.class}, minimum);
+    }
+
+    private static ArgumentType<?> parseVec2ArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
+        boolean centerCorrect = Boolean.parseBoolean(args);
+        return constructMinecraftArgumentType(clazz, new Class[]{boolean.class}, centerCorrect);
     }
 
     private static ArgumentType<?> parseVec3ArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
