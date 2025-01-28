@@ -1,19 +1,40 @@
 import org.jetbrains.changelog.Changelog
 
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
-	id "me.modmuss50.mod-publish-plugin" version "0.+"
+	id 'fabric-loom' version '1.9-SNAPSHOT'
+	id "me.modmuss50.mod-publish-plugin" version "0.8.3"
 	id 'org.jetbrains.changelog' version '2.+'
 }
-
-sourceCompatibility = JavaVersion.VERSION_21
-targetCompatibility = JavaVersion.VERSION_21
 
 version = "${mod_version}+${minecraft_version}"
 group = project.maven_group
 
 repositories {
 	maven { url 'https://maven.nucleoid.xyz' }
+}
+
+sourceSets {
+	testmod {
+		runtimeClasspath += main.runtimeClasspath
+		compileClasspath += main.compileClasspath
+	}
+}
+
+loom {
+	runs {
+		testmodClient {
+			client()
+			ideConfigGenerated project.rootProject == project
+			name = "Test Mod Client"
+			source sourceSets.testmod
+		}
+		testmodServer {
+			server()
+			ideConfigGenerated project.rootProject == project
+			name = "Test Mod Server"
+			source sourceSets.testmod
+		}
+	}
 }
 
 dependencies {
@@ -27,6 +48,8 @@ dependencies {
 
 	modImplementation include("eu.pb4:predicate-api:${project.predicate_api_version}")
 	modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
+
+	testmodImplementation sourceSets.main.output
 }
 
 processResources {
