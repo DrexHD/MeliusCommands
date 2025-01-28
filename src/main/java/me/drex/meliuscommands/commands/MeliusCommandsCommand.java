@@ -17,6 +17,8 @@ import net.minecraft.network.chat.HoverEvent;
 import java.util.List;
 
 public class MeliusCommandsCommand {
+    public static boolean DEBUG_COMMAND_EXCEPTIONS = false;
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             Commands.literal("melius-commands")
@@ -27,6 +29,13 @@ public class MeliusCommandsCommand {
                             Commands.argument("command", StringArgumentType.greedyString())
                                 .executes(context -> sendCommandPath(dispatcher, context))
                         )
+                ).then(
+                    Commands.literal("debug-command-exceptions")
+                        .executes(context -> {
+                            DEBUG_COMMAND_EXCEPTIONS = !DEBUG_COMMAND_EXCEPTIONS;
+                            context.getSource().sendSuccess(() -> Component.literal((DEBUG_COMMAND_EXCEPTIONS ? "Enabled" : "Disabled") + " command exception debugging."), false);
+                            return 1;
+                        })
                 )
         );
     }

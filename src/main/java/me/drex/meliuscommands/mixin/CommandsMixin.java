@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import me.drex.meliuscommands.MeliusCommands;
+import me.drex.meliuscommands.commands.MeliusCommandsCommand;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.config.command.LiteralNode;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
@@ -72,7 +73,7 @@ public class CommandsMixin {
         )
     )
     public boolean redirectIsDebugEnabled(Logger instance) {
-        return true;
+        return MeliusCommandsCommand.DEBUG_COMMAND_EXCEPTIONS;
     }
 
     @Unique

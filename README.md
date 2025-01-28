@@ -115,3 +115,9 @@ modifiers.
   - `[id]` is the id specified in the cooldown modifier.
   - `[formatting]` is the [duration formatting](https://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/time/DurationFormatUtils.html),
     make sure to escape properly.
+
+## Debug exceptions
+If you receive a `An unexpected error occurred trying to execute that command` 
+message when executing a command you can execute `/melius-commands debug-command-exceptions`
+to toggle command exception debugger. When this mode is active additional 
+debugging info is logged to the console when running into errors like that.
