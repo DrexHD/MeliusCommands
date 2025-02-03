@@ -74,7 +74,7 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
     }
 
     private static IntegerArgumentType parseIntegerArgumentType(String args) {
-        String[] arguments = args.split(" ");
+        String[] arguments = splitArguments(args);
         if (arguments.length > 2) {
             throw new IllegalArgumentException("Expected 0-2 arguments, but received " + arguments.length + ": " + Arrays.toString(arguments));
         } else {
@@ -91,7 +91,7 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
     }
 
     private static DoubleArgumentType parseDoubleArgumentType(String args) {
-        String[] arguments = args.split(" ");
+        String[] arguments = splitArguments(args);
         if (arguments.length > 2) {
             throw new IllegalArgumentException("Expected 0-2 arguments, but received " + arguments.length + ": " + Arrays.toString(arguments));
         } else {
@@ -108,7 +108,7 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
     }
 
     private static LongArgumentType parseLongArgumentType(String args) {
-        String[] arguments = args.split(" ");
+        String[] arguments = splitArguments(args);
         if (arguments.length > 2) {
             throw new IllegalArgumentException("Expected 0-2 arguments, but received " + arguments.length + ": " + Arrays.toString(arguments));
         } else {
@@ -125,7 +125,7 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
     }
 
     private static FloatArgumentType parseFloatArgumentType(String args) {
-        String[] arguments = args.split(" ");
+        String[] arguments = splitArguments(args);
         if (arguments.length > 2) {
             throw new IllegalArgumentException("Expected 0-2 arguments, but received " + arguments.length + ": " + Arrays.toString(arguments));
         } else {
@@ -139,6 +139,13 @@ public class BrigadierArgumentTypeParser implements ArgumentTypeParser {
             }
             return FloatArgumentType.floatArg();
         }
+    }
+    
+    private static String[] splitArguments(String args) {
+        if (args.isEmpty()) {
+            return new String[0];
+        }
+        return args.split(" ");
     }
 
 }

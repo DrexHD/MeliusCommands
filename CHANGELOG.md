@@ -6,13 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.1] - 2025-01-28
+## [2.0.1] - 2025-02-03
 ### Added
 - Command exception debugger
 
 ### Fixed
 - Vec2 argument type
 - Vec3 argument type
+- Brigadier argument parsing for empty arguments
 
 ## [2.0.0+beta.2] - 2024-10-04
 ### Added
