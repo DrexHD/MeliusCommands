@@ -10,6 +10,7 @@ import me.drex.meliuscommands.parser.ArgumentTypeParser;
 import me.drex.meliuscommands.parser.BrigadierArgumentTypeParser;
 import me.drex.meliuscommands.parser.MinecraftArgumentTypeParser;
 import me.drex.meliuscommands.config.common.CommandAction;
+import me.drex.meliuscommands.util.CodecUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -23,7 +24,7 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
 
     public final String type;
 
-    public static final Codec<ArgumentNode<?>> CODEC = Codec.lazyInitialized(() -> Codec.recursive("Argument Node", argumentCodec -> RecordCodecBuilder.create(instance ->
+    public static final Codec<ArgumentNode<?>> CODEC = CodecUtil.lazyInitialized(() -> CodecUtil.recursive("Argument Node", argumentCodec -> RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.STRING.fieldOf("id").forGetter(node -> node.id),
             Codec.STRING.fieldOf("type").forGetter(node -> node.type),
@@ -51,7 +52,7 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
         String[] splits = type.split(" ", 2);
         String type = splits[0];
         String args = splits.length > 1 ? splits[1] : "";
-        ResourceLocation resourceLocation = ResourceLocation.parse(type);
+        ResourceLocation resourceLocation = new ResourceLocation(type);
         for (ArgumentTypeParser parser : PARSERS) {
             if (parser.canParse(resourceLocation)) {
                 @SuppressWarnings("unchecked")

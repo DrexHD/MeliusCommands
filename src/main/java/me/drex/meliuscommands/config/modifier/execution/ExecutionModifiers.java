@@ -11,10 +11,10 @@ import java.util.Map;
 public class ExecutionModifiers {
     public static final Map<ResourceLocation, ExecutionModifierType<?>> COMMAND_MODIFIERS = new HashMap<>();
 
-    public static final Codec<ExecutionModifier> CODEC = ExecutionModifierType.TYPE_CODEC.dispatch(ExecutionModifier::getType, ExecutionModifierType::codec);
+    public static final Codec<ExecutionModifier> CODEC = ExecutionModifierType.TYPE_CODEC.dispatch(ExecutionModifier::getType, type -> type.codec().codec());
 
-    public static final ExecutionModifierType<AddPredicateModifier> ADD_PREDICATE = ExecutionModifierType.create(ResourceLocation.fromNamespaceAndPath("predicate", "add"), AddPredicateModifier.CODEC);
-    public static final ExecutionModifierType<CooldownModifier> COOLDOWN = ExecutionModifierType.create(ResourceLocation.fromNamespaceAndPath("cooldown", "set"), CooldownModifier.CODEC);
+    public static final ExecutionModifierType<AddPredicateModifier> ADD_PREDICATE = ExecutionModifierType.create(new ResourceLocation("predicate", "add"), AddPredicateModifier.CODEC);
+    public static final ExecutionModifierType<CooldownModifier> COOLDOWN = ExecutionModifierType.create(new ResourceLocation("cooldown", "set"), CooldownModifier.CODEC);
 
     static {
         register(ADD_PREDICATE);

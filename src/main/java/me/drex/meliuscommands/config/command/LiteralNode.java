@@ -7,6 +7,7 @@ import eu.pb4.predicate.api.BuiltinPredicates;
 import eu.pb4.predicate.api.MinecraftPredicate;
 import eu.pb4.predicate.api.PredicateRegistry;
 import me.drex.meliuscommands.config.common.CommandAction;
+import me.drex.meliuscommands.util.CodecUtil;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 public class LiteralNode extends CommandNode<LiteralArgumentBuilder<CommandSourceStack>> {
 
-    public static final Codec<LiteralNode> CODEC = Codec.lazyInitialized(() -> Codec.recursive("Literal Node", literalCodec -> RecordCodecBuilder.create(instance ->
+    public static final Codec<LiteralNode> CODEC = CodecUtil.lazyInitialized(() -> CodecUtil.recursive("Literal Node", literalCodec -> RecordCodecBuilder.create(instance ->
         instance.group(
             Codec.STRING.fieldOf("id").forGetter(node -> node.id),
             literalCodec.listOf().optionalFieldOf("literals", Collections.emptyList()).forGetter(node -> node.literals),

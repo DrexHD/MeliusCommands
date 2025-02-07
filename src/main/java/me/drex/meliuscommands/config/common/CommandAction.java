@@ -1,34 +1,28 @@
 package me.drex.meliuscommands.config.common;
 
+import com.mojang.brigadier.ResultConsumer;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import eu.pb4.placeholders.api.ParserContext;
 import eu.pb4.placeholders.api.PlaceholderContext;
-import eu.pb4.placeholders.api.node.DynamicTextNode;
-import eu.pb4.placeholders.api.parsers.NodeParser;
-import eu.pb4.placeholders.api.parsers.TagLikeParser;
+import eu.pb4.placeholders.api.Placeholders;
+import eu.pb4.placeholders.api.node.TextNode;
 import me.drex.meliuscommands.mixin.CommandContextAccessor;
-import net.minecraft.commands.CommandResultCallback;
+import me.drex.meliuscommands.util.CodecUtil;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-
-import static eu.pb4.placeholders.api.parsers.TagLikeParser.PLACEHOLDER_USER;
+import java.util.function.BinaryOperator;
 
 public record CommandAction(String command, boolean console, boolean silent, Optional<Integer> permissionLevel) {
 
-    private static final TagLikeParser.Format PLACEHOLDER_COMMAND = TagLikeParser.Format.of("${", "}", " ");
-    private static final ParserContext.Key<Function<String, Component>> ARGUMENTS = DynamicTextNode.key("melius_commands");
-    private static final NodeParser PARSER = NodeParser.builder()
-        .globalPlaceholders(PLACEHOLDER_COMMAND)
-        .placeholders(PLACEHOLDER_USER, ARGUMENTS)
-        .build();
+    private static final BinaryOperator<ResultConsumer<CommandSourceStack>> CALLBACK_CHAINER = (resultConsumer, resultConsumer2) -> (commandContext, bl, i) -> {
+        resultConsumer.onCommandComplete(commandContext, bl, i);
+        resultConsumer2.onCommandComplete(commandContext, bl, i);
+    };
 
     public CommandAction(String command) {
         this(command, true, true, Optional.of(4));
@@ -41,23 +35,27 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
             Codec.INT.optionalFieldOf("op_level").forGetter(CommandAction::permissionLevel)
         ).apply(instance, CommandAction::new)
     );
-    public static final Codec<CommandAction> CODEC = Codec.withAlternative(FULL_CODEC, Codec.STRING, CommandAction::new);
+    public static final Codec<CommandAction> CODEC = CodecUtil.withAlternative(FULL_CODEC, Codec.STRING, CommandAction::new);
 
     public int execute(CommandContext<CommandSourceStack> ctx) {
         @SuppressWarnings("unchecked")
         Map<String, ParsedArgument<CommandSourceStack, ?>> arguments = ((CommandContextAccessor<CommandSourceStack>) ctx).getArguments();
-        var parserContext = PlaceholderContext.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
-            var argument = arguments.get(input);
-            String value = argument.getRange().get(ctx.getInput() + " ");
-            return Component.literal(value);
-        });
-        String parsedCommand = PARSER.parseText(command, parserContext).getString();
+        var command = this.command;
+        for (Map.Entry<String, ParsedArgument<CommandSourceStack, ?>> entry : arguments.entrySet()) {
+            String value = entry.getValue().getRange().get(ctx.getInput() + " ");
+            command = command.replace("${" + entry.getKey() + "}", value);
+        }
+
+        var placeholderContext = PlaceholderContext.of(ctx.getSource());
+
+        String parsedCommand = Placeholders.parseText(TextNode.of(command), placeholderContext).getString();
 
         AtomicInteger result = new AtomicInteger();
 
-        CommandSourceStack modifiedSource = ctx.getSource().withCallback((bl, i) -> {
-            result.set(i);
-        }, CommandResultCallback::chain);
+        CommandSourceStack modifiedSource = ctx.getSource()
+            .withCallback((context, success, i) -> {
+                result.set(i);
+            }, CALLBACK_CHAINER);
         if (console) {
             modifiedSource = modifiedSource.withSource(ctx.getSource().getServer());
         }

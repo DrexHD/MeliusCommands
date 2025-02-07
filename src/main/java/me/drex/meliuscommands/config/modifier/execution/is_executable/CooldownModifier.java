@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.meliuscommands.config.common.CommandAction;
 import me.drex.meliuscommands.config.modifier.execution.ExecutionModifierType;
 import me.drex.meliuscommands.config.modifier.execution.ExecutionModifiers;
+import me.drex.meliuscommands.util.CodecUtil;
 import me.drex.meliuscommands.util.CooldownManager;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +19,7 @@ public record CooldownModifier(String id, long seconds, List<CommandAction> fail
         instance.group(
             Codec.STRING.fieldOf("id").forGetter(CooldownModifier::id),
             Codec.LONG.fieldOf("seconds").forGetter(CooldownModifier::seconds),
-            Codec.withAlternative(CommandAction.CODEC.listOf(), CommandAction.CODEC, List::of).optionalFieldOf("failure", List.of()).forGetter(CooldownModifier::failure)
+            CodecUtil.withAlternative(CommandAction.CODEC.listOf(), CommandAction.CODEC, List::of).optionalFieldOf("failure", List.of()).forGetter(CooldownModifier::failure)
         ).apply(instance, CooldownModifier::new)
     );
 

@@ -10,6 +10,7 @@ import me.drex.meliuscommands.MeliusCommands;
 import me.drex.meliuscommands.config.command.LiteralNode;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatchers;
+import me.drex.meliuscommands.util.CodecUtil;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.loader.api.FabricLoader;
@@ -33,8 +34,8 @@ public class ConfigManager {
 
     public static final List<CommandMatcher> COMMAND_EXECUTION_MATCHERS = new LinkedList<>();
     public static final Map<Path, List<LiteralNode>> CUSTOM_COMMANDS = new HashMap<>();
-    public static final Codec<List<LiteralNode>> COMMANDS_CODEC = Codec.withAlternative(Codec.list(LiteralNode.CODEC), LiteralNode.CODEC, List::of);
-    public static final Codec<List<CommandMatcher>> MATCHERS_CODEC = Codec.withAlternative(Codec.list(CommandMatchers.CODEC), CommandMatchers.CODEC, List::of);
+    public static final Codec<List<LiteralNode>> COMMANDS_CODEC = CodecUtil.withAlternative(Codec.list(LiteralNode.CODEC), LiteralNode.CODEC, List::of);
+    public static final Codec<List<CommandMatcher>> MATCHERS_CODEC = CodecUtil.withAlternative(Codec.list(CommandMatchers.CODEC), CommandMatchers.CODEC, List::of);
 
     public static void init() {
         CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> load());
@@ -57,11 +58,11 @@ public class ConfigManager {
                     JsonReader jsonReader = new JsonReader(reader);
                     jsonReader.setLenient(false);
                     JsonElement jsonElement = Streams.parse(jsonReader);
-                    List<LiteralNode> literalNodes = COMMANDS_CODEC.parse(JsonOps.INSTANCE, jsonElement).getOrThrow(JsonParseException::new);
+                    List<LiteralNode> literalNodes = COMMANDS_CODEC.parse(JsonOps.INSTANCE, jsonElement).getOrThrow(false, s -> {});
                     CUSTOM_COMMANDS.put(path, literalNodes);
                 } catch (IOException e) {
                     LOGGER.error("Couldn't access custom commands in {}", path.getFileName(), e);
-                } catch (JsonParseException e) {
+                } catch (RuntimeException e) {
                     LOGGER.error("Couldn't to parse custom commands in {}", path.getFileName(), e);
                 }
             });
@@ -78,11 +79,11 @@ public class ConfigManager {
                     JsonReader jsonReader = new JsonReader(reader);
                     jsonReader.setLenient(false);
                     JsonElement jsonElement = Streams.parse(jsonReader);
-                    List<CommandMatcher> matchers = MATCHERS_CODEC.parse(JsonOps.INSTANCE, jsonElement).getOrThrow(JsonParseException::new);
+                    List<CommandMatcher> matchers = MATCHERS_CODEC.parse(JsonOps.INSTANCE, jsonElement).getOrThrow(false, s -> {});
                     COMMAND_EXECUTION_MATCHERS.addAll(matchers);
                 } catch (IOException e) {
                     LOGGER.error("Couldn't access command modifiers in {}", path.getFileName(), e);
-                } catch (JsonParseException e) {
+                } catch (RuntimeException e) {
                     LOGGER.error("Couldn't to parse command modifiers in {}", path.getFileName(), e);
                 }
             });

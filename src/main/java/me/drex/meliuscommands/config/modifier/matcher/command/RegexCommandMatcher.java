@@ -9,6 +9,7 @@ import me.drex.meliuscommands.config.modifier.execution.ExecutionModifiers;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcherType;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatchers;
+import me.drex.meliuscommands.util.CodecUtil;
 import net.minecraft.commands.CommandSourceStack;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public record RegexCommandMatcher(List<String> regexes, List<ExecutionModifier> executionModifiers) implements CommandMatcher {
     public static final MapCodec<RegexCommandMatcher> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-            Codec.withAlternative(Codec.STRING.listOf(), Codec.STRING, List::of).fieldOf("regexes").forGetter(RegexCommandMatcher::regexes),
+            CodecUtil.withAlternative(Codec.STRING.listOf(), Codec.STRING, List::of).fieldOf("regexes").forGetter(RegexCommandMatcher::regexes),
             ExecutionModifiers.CODEC.listOf().fieldOf("execution_modifiers").forGetter(RegexCommandMatcher::executionModifiers)
         ).apply(instance, RegexCommandMatcher::new)
     );

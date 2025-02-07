@@ -10,6 +10,7 @@ import eu.pb4.predicate.api.PredicateRegistry;
 import me.drex.meliuscommands.config.modifier.execution.ExecutionModifierType;
 import me.drex.meliuscommands.config.modifier.execution.ExecutionModifiers;
 import me.drex.meliuscommands.config.common.CommandAction;
+import me.drex.meliuscommands.util.CodecUtil;
 import net.minecraft.commands.CommandSourceStack;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public record AddPredicateModifier(MinecraftPredicate predicate, List<CommandAct
     public static final MapCodec<AddPredicateModifier> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
             PredicateRegistry.CODEC.fieldOf("predicate").forGetter(AddPredicateModifier::predicate),
-            Codec.withAlternative(CommandAction.CODEC.listOf(), CommandAction.CODEC, List::of).optionalFieldOf("failure", List.of()).forGetter(AddPredicateModifier::failure)
+            CodecUtil.withAlternative(CommandAction.CODEC.listOf(), CommandAction.CODEC, List::of).optionalFieldOf("failure", List.of()).forGetter(AddPredicateModifier::failure)
         ).apply(instance, AddPredicateModifier::new)
     );
 

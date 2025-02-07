@@ -15,14 +15,14 @@ import java.util.Map;
 public class CommandMatchers {
     public static final Map<ResourceLocation, CommandMatcherType<?>> MATCHERS = new HashMap<>();
 
-    public static final Codec<CommandMatcher> CODEC = CommandMatcherType.TYPE_CODEC.dispatch(CommandMatcher::getType, CommandMatcherType::codec);
+    public static final Codec<CommandMatcher> CODEC = CommandMatcherType.TYPE_CODEC.dispatch(CommandMatcher::getType, type -> type.codec().codec());
 
-    public static final CommandMatcherType<StrictCommandMatcher> STRICT_COMMAND_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("command", "strict"), StrictCommandMatcher.CODEC);
-    public static final CommandMatcherType<StartsWithCommandMatcher> STARTS_WITH_COMMAND_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("command", "starts_with"), StartsWithCommandMatcher.CODEC);
-    public static final CommandMatcherType<RegexCommandMatcher> REGEX_COMMAND_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("command", "regex"), RegexCommandMatcher.CODEC);
-    public static final CommandMatcherType<StrictNodeMatcher> STRICT_NODE_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("node", "strict"), StrictNodeMatcher.CODEC);
-    public static final CommandMatcherType<StartsWithNodeMatcher> STARTS_WITH_NODE_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("node", "starts_with"), StartsWithNodeMatcher.CODEC);
-    public static final CommandMatcherType<RegexNodeMatcher> REGEX_NODE_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("node", "regex"), RegexNodeMatcher.CODEC);
+    public static final CommandMatcherType<StrictCommandMatcher> STRICT_COMMAND_MATCHER = CommandMatcherType.create(new ResourceLocation("command", "strict"), StrictCommandMatcher.CODEC);
+    public static final CommandMatcherType<StartsWithCommandMatcher> STARTS_WITH_COMMAND_MATCHER = CommandMatcherType.create(new ResourceLocation("command", "starts_with"), StartsWithCommandMatcher.CODEC);
+    public static final CommandMatcherType<RegexCommandMatcher> REGEX_COMMAND_MATCHER = CommandMatcherType.create(new ResourceLocation("command", "regex"), RegexCommandMatcher.CODEC);
+    public static final CommandMatcherType<StrictNodeMatcher> STRICT_NODE_MATCHER = CommandMatcherType.create(new ResourceLocation("node", "strict"), StrictNodeMatcher.CODEC);
+    public static final CommandMatcherType<StartsWithNodeMatcher> STARTS_WITH_NODE_MATCHER = CommandMatcherType.create(new ResourceLocation("node", "starts_with"), StartsWithNodeMatcher.CODEC);
+    public static final CommandMatcherType<RegexNodeMatcher> REGEX_NODE_MATCHER = CommandMatcherType.create(new ResourceLocation("node", "regex"), RegexNodeMatcher.CODEC);
 
     static {
         register(STRICT_COMMAND_MATCHER);

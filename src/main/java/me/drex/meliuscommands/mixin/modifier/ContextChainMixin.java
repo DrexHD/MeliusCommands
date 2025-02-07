@@ -3,9 +3,8 @@ package me.drex.meliuscommands.mixin.modifier;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.context.ContextChain;
-import com.mojang.brigadier.tree.CommandNode;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
 import me.drex.meliuscommands.config.modifier.execution.ExecutionModifier;
@@ -15,18 +14,18 @@ import net.minecraft.commands.CommandSourceStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(ContextChain.class)
+@Mixin(CommandDispatcher.class)
 public abstract class ContextChainMixin {
 
     @WrapOperation(
-        method = "runExecutable",
+        method = "execute(Lcom/mojang/brigadier/ParseResults;)I",
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/brigadier/Command;run(Lcom/mojang/brigadier/context/CommandContext;)I"
         ),
         remap = false
     )
-    private static <S> int runConditionally(Command<S> command, CommandContext<S> ctx, Operation<Integer> original) {
+    private <S> int runConditionally(Command<S> command, CommandContext<S> ctx, Operation<Integer> original) {
         S src = ctx.getSource();
         if (!(src instanceof CommandSourceStack source)) {
             return original.call(command, ctx);

@@ -9,6 +9,7 @@ import me.drex.meliuscommands.config.modifier.matcher.CommandMatcherType;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatchers;
 import me.drex.meliuscommands.config.modifier.requirement.RequirementModifier;
 import me.drex.meliuscommands.config.modifier.requirement.RequirementModifiers;
+import me.drex.meliuscommands.util.CodecUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import java.util.Optional;
 public record StrictNodeMatcher(List<String> paths, Optional<RequirementModifier> requirementModifier, List<ExecutionModifier> executionModifiers) implements NodeMatcher {
     public static final MapCodec<StrictNodeMatcher> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-            Codec.withAlternative(Codec.STRING.listOf(), Codec.STRING, List::of).fieldOf("paths").forGetter(StrictNodeMatcher::paths),
+            CodecUtil.withAlternative(Codec.STRING.listOf(), Codec.STRING, List::of).fieldOf("paths").forGetter(StrictNodeMatcher::paths),
             RequirementModifiers.CODEC.optionalFieldOf("requirement_modifier").forGetter(StrictNodeMatcher::requirementModifier),
             ExecutionModifiers.CODEC.listOf().optionalFieldOf("execution_modifiers", List.of()).forGetter(StrictNodeMatcher::executionModifiers)
         ).apply(instance, StrictNodeMatcher::new)

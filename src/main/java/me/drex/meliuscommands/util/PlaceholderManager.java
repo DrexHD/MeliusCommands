@@ -10,7 +10,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 public class PlaceholderManager {
 
     public static void init() {
-        Placeholders.register(ResourceLocation.fromNamespaceAndPath(MeliusCommands.MOD_ID, "cooldown"), (context, argument) -> {
+        Placeholders.register(new ResourceLocation(MeliusCommands.MOD_ID, "cooldown"), (context, argument) -> {
             ServerPlayer player = context.player();
             if (player == null) {
                 return PlaceholderResult.invalid("No Player");
