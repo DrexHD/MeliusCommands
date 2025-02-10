@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 2025-02-10
+### Fixed
+- Use java 17 for release
+
 ## [2.0.1] - 2025-02-03
 ### Added
 - Command exception debugger
