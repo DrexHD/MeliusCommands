@@ -69,7 +69,8 @@ public class CommandsMixin {
         method = "performCommand",
         at = @At(
             value = "INVOKE",
-            target = "Lorg/slf4j/Logger;isDebugEnabled()Z"
+            target = "Lorg/slf4j/Logger;isDebugEnabled()Z",
+            remap = false
         )
     )
     public boolean redirectIsDebugEnabled(Logger instance) {

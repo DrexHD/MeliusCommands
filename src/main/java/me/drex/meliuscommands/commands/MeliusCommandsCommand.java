@@ -55,8 +55,8 @@ public class MeliusCommandsCommand {
             CommandNode<CommandSourceStack> node = nodes.get(nodes.size() - 1).getNode();
             String path = PathCache.getPath(dispatcher, node);
             context.getSource().sendSuccess(() -> Component.literal(path).withStyle(style ->
-                style.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, path))
-                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to copy to clipboard!")))
+                style.withClickEvent(new ClickEvent.CopyToClipboard(path))
+                    .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to copy to clipboard!")))
             ), false);
         }
         return 1;
