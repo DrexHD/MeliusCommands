@@ -9,6 +9,7 @@
     "CommandNodeAccessor",
     "CommandsMixin",
     "CommandSourceStackAccessor",
+    "compat.ParserBuilderMixin",
     "modifier.ContextChainMixin"
   ],
   "injectors": {

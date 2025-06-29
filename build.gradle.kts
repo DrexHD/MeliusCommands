@@ -49,6 +49,10 @@ dependencies {
 //    testmodImplementation(sourceSets.main.output)
 }
 
+stonecutter {
+    dependency("placeholder-api", (findProperty("placeholder_api_version") as String).split("+")[0])
+}
+
 publishMods {
     file.set(tasks.remapJar.get().archiveFile)
     type.set(STABLE)

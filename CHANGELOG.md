@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use stonecutter to support multiple versions
 
+### Fixed
+- Inconsistent command argument resolution 
+
 ## [2.0.1] - 2025-02-03
 ### Added
 - Command exception debugger
