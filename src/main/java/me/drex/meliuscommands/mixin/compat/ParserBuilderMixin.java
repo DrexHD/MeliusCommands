@@ -2,6 +2,7 @@ package me.drex.meliuscommands.mixin.compat;
 
 import eu.pb4.placeholders.api.parsers.ParserBuilder;
 import eu.pb4.placeholders.api.parsers.TagLikeParser;
+import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

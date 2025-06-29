@@ -1,7 +1,10 @@
 package me.drex.meliuscommands.config.common;
 
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedArgument;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pb4.placeholders.api.ParserContext;
@@ -43,15 +46,27 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
     );
     public static final Codec<CommandAction> CODEC = Codec.withAlternative(FULL_CODEC, Codec.STRING, CommandAction::new);
 
-    public int execute(CommandContext<CommandSourceStack> ctx) {
+    public int execute(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         @SuppressWarnings("unchecked")
         Map<String, ParsedArgument<CommandSourceStack, ?>> arguments = ((CommandContextAccessor<CommandSourceStack>) ctx).getArguments();
-        var parserContext = PlaceholderContext.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
-            var argument = arguments.get(input);
-            String value = argument.getRange().get(ctx.getInput() + " ");
-            return Component.literal(value);
-        });
-        String parsedCommand = PARSER.parseText(command, parserContext).getString();
+        String parsedCommand;
+        try {
+            var parserContext = PlaceholderContext.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
+                var argument = arguments.get(input);
+                if (argument == null) {
+                    throw new IllegalStateException(new SimpleCommandExceptionType(new LiteralMessage("Unknown argument '" + input + "' in '" + command + "'")).create());
+                }
+                String value = argument.getRange().get(ctx.getInput() + " ");
+                return Component.literal(value);
+            });
+            parsedCommand = PARSER.parseText(command, parserContext).getString();
+        } catch (IllegalStateException e) {
+            if (e.getCause() instanceof CommandSyntaxException syntaxException) {
+                throw syntaxException;
+            } else {
+                throw new SimpleCommandExceptionType(new LiteralMessage("Failed to parse '" + command + "', because '" + e.getMessage() + "'")).create();
+            }
+        }
 
         AtomicInteger result = new AtomicInteger();
 

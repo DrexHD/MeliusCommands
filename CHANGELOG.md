@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Use stonecutter to support multiple versions
 - Bundle fabric-permission-api
+- Improved error messages
 
 ### Fixed
 - Inconsistent command argument resolution 

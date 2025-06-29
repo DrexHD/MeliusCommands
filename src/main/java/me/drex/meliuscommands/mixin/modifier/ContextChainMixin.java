@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ContextChain;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.config.modifier.matcher.CommandMatcher;
@@ -26,7 +27,7 @@ public abstract class ContextChainMixin {
         ),
         remap = false
     )
-    private static <S> int runConditionally(Command<S> command, CommandContext<S> ctx, Operation<Integer> original) {
+    private static <S> int runConditionally(Command<S> command, CommandContext<S> ctx, Operation<Integer> original) throws CommandSyntaxException {
         S src = ctx.getSource();
         if (!(src instanceof CommandSourceStack source)) {
             return original.call(command, ctx);
