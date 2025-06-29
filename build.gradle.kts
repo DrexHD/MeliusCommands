@@ -44,6 +44,7 @@ dependencies {
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:${findProperty("fabric_version")}")
 
+    includeMod("me.lucko:fabric-permissions-api:${findProperty("permission_api_version")}")
     includeMod("eu.pb4:predicate-api:${findProperty("predicate_api_version")}")
     includeMod("eu.pb4:placeholder-api:${findProperty("placeholder_api_version")}")
 //    testmodImplementation(sourceSets.main.output)

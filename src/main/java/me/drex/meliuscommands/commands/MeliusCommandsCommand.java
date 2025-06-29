@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContextBuilder;
 import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
 import me.drex.meliuscommands.util.PathCache;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.ClickEvent;
@@ -22,15 +23,17 @@ public class MeliusCommandsCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             Commands.literal("melius-commands")
-                .requires(source -> source.hasPermission(2))
+                .requires(Permissions.require("melius-commands.command.root", 2))
                 .then(
                     Commands.literal("path")
+                        .requires(Permissions.require("melius-commands.command.path", 2))
                         .then(
                             Commands.argument("command", StringArgumentType.greedyString())
                                 .executes(context -> sendCommandPath(dispatcher, context))
                         )
                 ).then(
                     Commands.literal("debug-command-exceptions")
+                        .requires(Permissions.require("melius-commands.command.debug-command-exceptions", 2))
                         .executes(context -> {
                             DEBUG_COMMAND_EXCEPTIONS = !DEBUG_COMMAND_EXCEPTIONS;
                             context.getSource().sendSuccess(() -> Component.literal((DEBUG_COMMAND_EXCEPTIONS ? "Enabled" : "Disabled") + " command exception debugging."), false);
