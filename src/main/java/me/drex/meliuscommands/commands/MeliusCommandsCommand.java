@@ -55,9 +55,9 @@ public class MeliusCommandsCommand {
             CommandNode<CommandSourceStack> node = nodes.get(nodes.size() - 1).getNode();
             String path = PathCache.getPath(dispatcher, node);
             context.getSource().sendSuccess(() -> Component.literal(path).withStyle(style ->
-                style.withClickEvent(new ClickEvent.CopyToClipboard(path))
-                    .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to copy to clipboard!")))
-            ), false);
+                style.withClickEvent(new ClickEvent/*? if >= 1.21.5 {*/ .CopyToClipboard( /*?} else {*//*(ClickEvent.Action.COPY_TO_CLIPBOARD, *//*?}*/path))
+                    .withHoverEvent(new HoverEvent/*? if >= 1.21.5 {*/ .ShowText( /*?} else {*//*(HoverEvent.Action.SHOW_TEXT, *//*?}*/Component.literal("Click to copy to clipboard!")))
+                ), false);
         }
         return 1;
     }

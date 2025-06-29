@@ -179,7 +179,7 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
      */
     @SuppressWarnings("unchecked")
     public static Class<? extends ArgumentType<?>> getClassByKey(ResourceLocation resourceLocation) throws IllegalArgumentException {
-        ArgumentTypeInfo<?, ?> entry = BuiltInRegistries.COMMAND_ARGUMENT_TYPE.getValue(resourceLocation);
+        ArgumentTypeInfo<?, ?> entry = BuiltInRegistries.COMMAND_ARGUMENT_TYPE./*? if >= 1.21.2 {*/ getValue /*?} else {*/ /*get *//*?}*/(resourceLocation);
         if (entry == null) {
             throw new IllegalArgumentException(resourceLocation.toString());
         }

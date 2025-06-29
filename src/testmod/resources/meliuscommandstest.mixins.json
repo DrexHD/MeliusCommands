@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "me.drex.meliuscommandstest.mixin",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_${javaVersion}",
   "mixins": [
     "MinecraftArgumentTypeParserAccessor"
   ],
