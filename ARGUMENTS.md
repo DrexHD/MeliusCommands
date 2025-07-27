@@ -2,8 +2,8 @@
 
 ## Brigadier
 
-- `briagdier:bool`
-- `briagdier:string <type>`: `<type>` can be `single_word`, `quotable_phrase` or `greedy_phrase`
+- `brigadier:bool`
+- `brigadier:string <type>`: `<type>` can be `single_word`, `quotable_phrase` or `greedy_phrase`
 - `brigadier:integer <min> <max>`: `<min>` and `<max>` can be any integer. It is possible to omit both arguments.
 - `brigadier:double <min> <max>`: `<min>` and `<max>` can be any double. It is possible to omit both arguments.
 - `brigadier:long <min> <max>`: `<min>` and `<max>` can be any long. It is possible to omit both arguments.
