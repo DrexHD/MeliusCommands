@@ -59,7 +59,7 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
                 String value = argument.getRange().get(ctx.getInput() + " ");
                 return Component.literal(value);
             });
-            parsedCommand = PARSER.parseText(command, parserContext).getString();
+            parsedCommand = PARSER.parseText(command.replace("\\", "\\\\"), parserContext).getString();
         } catch (IllegalStateException e) {
             if (e.getCause() instanceof CommandSyntaxException syntaxException) {
                 throw syntaxException;
