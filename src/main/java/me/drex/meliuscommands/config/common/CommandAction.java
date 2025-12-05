@@ -16,6 +16,10 @@ import me.drex.meliuscommands.mixin.CommandContextAccessor;
 import net.minecraft.commands.CommandResultCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+//? if > 1.21.10 {
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.PermissionLevel;
+//? }
 
 import java.util.Map;
 import java.util.Optional;
@@ -80,7 +84,11 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
             modifiedSource = modifiedSource.withSuppressedOutput();
         }
         if (permissionLevel.isPresent()) {
-            modifiedSource = modifiedSource.withPermission(permissionLevel.get());
+            //? if > 1.21.10 {
+            modifiedSource = modifiedSource.withPermission(LevelBasedPermissionSet.forLevel(PermissionLevel.byId(permissionLevel.get())));
+            //? } else {
+            /*modifiedSource = modifiedSource.withPermission(permissionLevel.get());
+            *///? }
         }
 
         ctx.getSource().getServer().getCommands().performPrefixedCommand(modifiedSource, parsedCommand);

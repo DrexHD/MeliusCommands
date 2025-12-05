@@ -1,7 +1,7 @@
 package me.drex.meliuscommandstest.mixin;
 
 import me.drex.meliuscommands.parser.MinecraftArgumentTypeParser;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -11,6 +11,6 @@ import java.util.Map;
 public interface MinecraftArgumentTypeParserAccessor {
 
     @Accessor
-    Map<ResourceLocation, Object> getARGUMENT_TYPE_PARSERS();
+    Map<Identifier, Object> getARGUMENT_TYPE_PARSERS();
 
 }

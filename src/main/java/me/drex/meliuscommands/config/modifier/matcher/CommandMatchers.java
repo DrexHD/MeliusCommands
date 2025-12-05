@@ -7,22 +7,22 @@ import me.drex.meliuscommands.config.modifier.matcher.node.StartsWithNodeMatcher
 import me.drex.meliuscommands.config.modifier.matcher.command.RegexCommandMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.node.RegexNodeMatcher;
 import me.drex.meliuscommands.config.modifier.matcher.node.StrictNodeMatcher;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandMatchers {
-    public static final Map<ResourceLocation, CommandMatcherType<?>> MATCHERS = new HashMap<>();
+    public static final Map<Identifier, CommandMatcherType<?>> MATCHERS = new HashMap<>();
 
     public static final Codec<CommandMatcher> CODEC = CommandMatcherType.TYPE_CODEC.dispatch(CommandMatcher::getType, CommandMatcherType::codec);
 
-    public static final CommandMatcherType<StrictCommandMatcher> STRICT_COMMAND_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("command", "strict"), StrictCommandMatcher.CODEC);
-    public static final CommandMatcherType<StartsWithCommandMatcher> STARTS_WITH_COMMAND_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("command", "starts_with"), StartsWithCommandMatcher.CODEC);
-    public static final CommandMatcherType<RegexCommandMatcher> REGEX_COMMAND_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("command", "regex"), RegexCommandMatcher.CODEC);
-    public static final CommandMatcherType<StrictNodeMatcher> STRICT_NODE_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("node", "strict"), StrictNodeMatcher.CODEC);
-    public static final CommandMatcherType<StartsWithNodeMatcher> STARTS_WITH_NODE_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("node", "starts_with"), StartsWithNodeMatcher.CODEC);
-    public static final CommandMatcherType<RegexNodeMatcher> REGEX_NODE_MATCHER = CommandMatcherType.create(ResourceLocation.fromNamespaceAndPath("node", "regex"), RegexNodeMatcher.CODEC);
+    public static final CommandMatcherType<StrictCommandMatcher> STRICT_COMMAND_MATCHER = CommandMatcherType.create(Identifier.fromNamespaceAndPath("command", "strict"), StrictCommandMatcher.CODEC);
+    public static final CommandMatcherType<StartsWithCommandMatcher> STARTS_WITH_COMMAND_MATCHER = CommandMatcherType.create(Identifier.fromNamespaceAndPath("command", "starts_with"), StartsWithCommandMatcher.CODEC);
+    public static final CommandMatcherType<RegexCommandMatcher> REGEX_COMMAND_MATCHER = CommandMatcherType.create(Identifier.fromNamespaceAndPath("command", "regex"), RegexCommandMatcher.CODEC);
+    public static final CommandMatcherType<StrictNodeMatcher> STRICT_NODE_MATCHER = CommandMatcherType.create(Identifier.fromNamespaceAndPath("node", "strict"), StrictNodeMatcher.CODEC);
+    public static final CommandMatcherType<StartsWithNodeMatcher> STARTS_WITH_NODE_MATCHER = CommandMatcherType.create(Identifier.fromNamespaceAndPath("node", "starts_with"), StartsWithNodeMatcher.CODEC);
+    public static final CommandMatcherType<RegexNodeMatcher> REGEX_NODE_MATCHER = CommandMatcherType.create(Identifier.fromNamespaceAndPath("node", "regex"), RegexNodeMatcher.CODEC);
 
     static {
         register(STRICT_COMMAND_MATCHER);

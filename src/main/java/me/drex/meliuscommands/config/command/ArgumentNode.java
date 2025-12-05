@@ -14,7 +14,7 @@ import me.drex.meliuscommands.config.common.CommandAction;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +52,7 @@ public class ArgumentNode<T> extends CommandNode<RequiredArgumentBuilder<Command
         String[] splits = type.split(" ", 2);
         String type = splits[0];
         String args = splits.length > 1 ? splits[1] : "";
-        ResourceLocation resourceLocation = ResourceLocation.parse(type);
+        Identifier resourceLocation = Identifier.parse(type);
         for (ArgumentTypeParser parser : PARSERS) {
             if (parser.canParse(resourceLocation)) {
                 @SuppressWarnings("unchecked")

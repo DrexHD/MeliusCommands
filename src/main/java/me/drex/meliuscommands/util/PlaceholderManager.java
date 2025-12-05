@@ -3,14 +3,14 @@ package me.drex.meliuscommands.util;
 import eu.pb4.placeholders.api.PlaceholderResult;
 import eu.pb4.placeholders.api.Placeholders;
 import me.drex.meliuscommands.MeliusCommands;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 public class PlaceholderManager {
 
     public static void init() {
-        Placeholders.register(ResourceLocation.fromNamespaceAndPath(MeliusCommands.MOD_ID, "cooldown"), (context, argument) -> {
+        Placeholders.register(Identifier.fromNamespaceAndPath(MeliusCommands.MOD_ID, "cooldown"), (context, argument) -> {
             ServerPlayer player = context.player();
             if (player == null) {
                 return PlaceholderResult.invalid("No Player");

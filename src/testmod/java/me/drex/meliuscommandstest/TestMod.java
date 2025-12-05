@@ -11,7 +11,7 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class TestMod implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             CommandBuildContext context = Commands.createValidationContext(VanillaRegistries.createLookup());
             var parser = MinecraftArgumentTypeParser.INSTANCE;
-            Set<ResourceLocation> specialArguments = ((MinecraftArgumentTypeParserAccessor) parser).getARGUMENT_TYPE_PARSERS().keySet();
+            Set<Identifier> specialArguments = ((MinecraftArgumentTypeParserAccessor) parser).getARGUMENT_TYPE_PARSERS().keySet();
 
             // Validate argument type parser
 

@@ -32,7 +32,7 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -41,28 +41,28 @@ import java.util.Map;
 public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
 
     public static final MinecraftArgumentTypeParser INSTANCE = new MinecraftArgumentTypeParser();
-    private static final Map<ResourceLocation, ArgumentParserFunction> ARGUMENT_TYPE_PARSERS = Map.of(
-        ResourceLocation.withDefaultNamespace("entity"), MinecraftArgumentTypeParser::parseEntityArgumentType,
-        ResourceLocation.withDefaultNamespace("resource"), MinecraftArgumentTypeParser::parseResourceArgumentType,
-        ResourceLocation.withDefaultNamespace("resource_key"), MinecraftArgumentTypeParser::parseResourceKeyArgumentType,
-        ResourceLocation.withDefaultNamespace("resource_or_tag"), MinecraftArgumentTypeParser::parseResourceOrTagArgumentType,
-        ResourceLocation.withDefaultNamespace("resource_or_tag_key"), MinecraftArgumentTypeParser::parseResourceOrTagKeyArgumentType,
-        ResourceLocation.withDefaultNamespace("score_holder"), MinecraftArgumentTypeParser::parseScoreHolderArgumentType,
-        ResourceLocation.withDefaultNamespace("time"), MinecraftArgumentTypeParser::parseTimeArgumentType,
-        ResourceLocation.withDefaultNamespace("vec2"), MinecraftArgumentTypeParser::parseVec2ArgumentType,
-        ResourceLocation.withDefaultNamespace("vec3"), MinecraftArgumentTypeParser::parseVec3ArgumentType
+    private static final Map<Identifier, ArgumentParserFunction> ARGUMENT_TYPE_PARSERS = Map.of(
+        Identifier.withDefaultNamespace("entity"), MinecraftArgumentTypeParser::parseEntityArgumentType,
+        Identifier.withDefaultNamespace("resource"), MinecraftArgumentTypeParser::parseResourceArgumentType,
+        Identifier.withDefaultNamespace("resource_key"), MinecraftArgumentTypeParser::parseResourceKeyArgumentType,
+        Identifier.withDefaultNamespace("resource_or_tag"), MinecraftArgumentTypeParser::parseResourceOrTagArgumentType,
+        Identifier.withDefaultNamespace("resource_or_tag_key"), MinecraftArgumentTypeParser::parseResourceOrTagKeyArgumentType,
+        Identifier.withDefaultNamespace("score_holder"), MinecraftArgumentTypeParser::parseScoreHolderArgumentType,
+        Identifier.withDefaultNamespace("time"), MinecraftArgumentTypeParser::parseTimeArgumentType,
+        Identifier.withDefaultNamespace("vec2"), MinecraftArgumentTypeParser::parseVec2ArgumentType,
+        Identifier.withDefaultNamespace("vec3"), MinecraftArgumentTypeParser::parseVec3ArgumentType
     );
 
     private MinecraftArgumentTypeParser() {
     }
 
     @Override
-    public boolean canParse(ResourceLocation resourceLocation) {
+    public boolean canParse(Identifier resourceLocation) {
         return BuiltInRegistries.COMMAND_ARGUMENT_TYPE.get(resourceLocation) != null;
     }
 
     @Override
-    public ArgumentType<?> parse(CommandBuildContext context, ResourceLocation resourceLocation, String args) {
+    public ArgumentType<?> parse(CommandBuildContext context, Identifier resourceLocation, String args) {
         Class<? extends ArgumentType<?>> clazz = getClassByKey(resourceLocation);
         ArgumentParserFunction parserFunction = ARGUMENT_TYPE_PARSERS.get(resourceLocation);
         if (parserFunction != null) {
@@ -121,22 +121,22 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
     }
 
     private static ArgumentType<?> parseResourceArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = ResourceLocation.parse(args);
+        Identifier resourceLocation = Identifier.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{CommandBuildContext.class, ResourceKey.class}, context, ResourceKey.createRegistryKey(resourceLocation));
     }
 
     private static ArgumentType<?> parseResourceKeyArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = ResourceLocation.parse(args);
+        Identifier resourceLocation = Identifier.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{ResourceKey.class}, ResourceKey.createRegistryKey(resourceLocation));
     }
 
     private static ArgumentType<?> parseResourceOrTagArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = ResourceLocation.parse(args);
+        Identifier resourceLocation = Identifier.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{CommandBuildContext.class, ResourceKey.class}, context, ResourceKey.createRegistryKey(resourceLocation));
     }
 
     private static ArgumentType<?> parseResourceOrTagKeyArgumentType(Class<? extends ArgumentType<?>> clazz, CommandBuildContext context, String args) {
-        ResourceLocation resourceLocation = ResourceLocation.parse(args);
+        Identifier resourceLocation = Identifier.parse(args);
         return constructMinecraftArgumentType(clazz, new Class[]{ResourceKey.class}, ResourceKey.createRegistryKey(resourceLocation));
     }
 
@@ -178,7 +178,7 @@ public class MinecraftArgumentTypeParser implements ArgumentTypeParser {
      * @throws IllegalArgumentException if no such argument is registered
      */
     @SuppressWarnings("unchecked")
-    public static Class<? extends ArgumentType<?>> getClassByKey(ResourceLocation resourceLocation) throws IllegalArgumentException {
+    public static Class<? extends ArgumentType<?>> getClassByKey(Identifier resourceLocation) throws IllegalArgumentException {
         ArgumentTypeInfo<?, ?> entry = BuiltInRegistries.COMMAND_ARGUMENT_TYPE./*? if >= 1.21.2 {*/ getValue /*?} else {*/ /*get *//*?}*/(resourceLocation);
         if (entry == null) {
             throw new IllegalArgumentException(resourceLocation.toString());

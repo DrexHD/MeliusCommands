@@ -2,7 +2,7 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.ChangelogPluginExtension
 
 plugins {
-    id("fabric-loom") version "1.11-SNAPSHOT"
+    id("fabric-loom") version "1.14-SNAPSHOT"
     id("maven-publish")
     id("me.modmuss50.mod-publish-plugin") version "0.8.4"
     id("org.jetbrains.changelog")
@@ -51,7 +51,13 @@ dependencies {
 }
 
 stonecutter {
-    dependency("placeholder-api", (findProperty("placeholder_api_version") as String).split("+")[0])
+    dependencies["placeholder-api"] = (findProperty("placeholder_api_version") as String).split("+")[0]
+}
+
+stonecutter {
+    replacements.string(eval(current.version, "<=1.21.10")) {
+        replace("Identifier", "ResourceLocation")
+    }
 }
 
 publishMods {
