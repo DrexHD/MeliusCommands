@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 2025-12-20
+### Fixed
+- NoSuchMethodError crash on 1.21.11
+
 ## [2.1.1] - 2025-10-02
 ### Fixed
 - Escaping not always working in commands
