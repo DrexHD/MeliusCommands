@@ -58,7 +58,8 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
             var parserContext = PlaceholderContext.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
                 var argument = arguments.get(input);
                 if (argument == null) {
-                    throw new IllegalStateException(new SimpleCommandExceptionType(new LiteralMessage("Unknown argument '" + input + "' in '" + command + "'")).create());
+                    // Unknown argument, keep it as it was
+                    return Component.literal("${" + input + "}");
                 }
                 String value = argument.getRange().get(ctx.getInput() + " ");
                 return Component.literal(value);
