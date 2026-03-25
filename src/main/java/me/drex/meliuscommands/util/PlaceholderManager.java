@@ -4,14 +4,14 @@ import eu.pb4.placeholders.api.PlaceholderResult;
 import eu.pb4.placeholders.api.Placeholders;
 import me.drex.meliuscommands.MeliusCommands;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 
 public class PlaceholderManager {
 
     public static void init() {
-        Placeholders.register(Identifier.fromNamespaceAndPath(MeliusCommands.MOD_ID, "cooldown"), (context, argument) -> {
-            ServerPlayer player = context.player();
+        Placeholders./*? if >= 26.1 {*/registerServer/*?} else {*//*register*//*?}*/(Identifier.fromNamespaceAndPath(MeliusCommands.MOD_ID, "cooldown"), (context, argument) -> {
+            Player player = context.player();
             if (player == null) {
                 return PlaceholderResult.invalid("No Player");
             }

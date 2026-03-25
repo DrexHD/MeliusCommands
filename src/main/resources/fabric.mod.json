@@ -23,7 +23,7 @@
     "meliuscommands.mixins.json"
   ],
   "depends": {
-    "fabric": "*",
+    "fabric-api": "*",
     "java": ">=${javaVersion}"
   }
 }

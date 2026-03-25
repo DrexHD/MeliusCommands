@@ -8,7 +8,11 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pb4.placeholders.api.ParserContext;
-import eu.pb4.placeholders.api.PlaceholderContext;
+//? if >= 26.1 {
+import eu.pb4.placeholders.api.ServerPlaceholderContext;
+//? } else {
+//import eu.pb4.placeholders.api.PlaceholderContext;
+//? }
 import eu.pb4.placeholders.api.node.DynamicTextNode;
 import eu.pb4.placeholders.api.parsers.NodeParser;
 import eu.pb4.placeholders.api.parsers.TagLikeParser;
@@ -33,7 +37,11 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
     private static final TagLikeParser.Format PLACEHOLDER_COMMAND = TagLikeParser.Format.of("${", "}", " ");
     private static final ParserContext.Key<Function<String, Component>> ARGUMENTS = DynamicTextNode.key("melius_commands");
     private static final NodeParser PARSER = NodeParser.builder()
-        .globalPlaceholders(PLACEHOLDER_COMMAND)
+        //? if >= 26.1 {
+        .serverPlaceholders(PLACEHOLDER_COMMAND)
+        //? } else {
+//        .globalPlaceholders(PLACEHOLDER_COMMAND)
+        //? }
         .placeholders(PLACEHOLDER_USER, ARGUMENTS)
         .build();
 
@@ -55,7 +63,7 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
         Map<String, ParsedArgument<CommandSourceStack, ?>> arguments = ((CommandContextAccessor<CommandSourceStack>) ctx).getArguments();
         String parsedCommand;
         try {
-            var parserContext = PlaceholderContext.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
+            var parserContext = /*? if >= 26.1 {*/ServerPlaceholderContext/*?} else {*//*PlaceholderContext*//*?}*/.of(ctx.getSource()).asParserContext().with(ARGUMENTS, input -> {
                 var argument = arguments.get(input);
                 if (argument == null) {
                     // Unknown argument, keep it as it was
@@ -64,7 +72,7 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
                 String value = argument.getRange().get(ctx.getInput() + " ");
                 return Component.literal(value);
             });
-            parsedCommand = PARSER.parseText(command.replace("\\", "\\\\"), parserContext).getString();
+            parsedCommand = PARSER./*? if >= 26.1 {*/parseComponent/*?} else {*//*parseText*//*?}*/(command.replace("\\", "\\\\"), parserContext).getString();
         } catch (IllegalStateException e) {
             if (e.getCause() instanceof CommandSyntaxException syntaxException) {
                 throw syntaxException;
