@@ -13,7 +13,10 @@
 					"id": "targets",
 					"type": "minecraft:entity players",
 					"executes": [
-						"tellraw ${targets} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
+						{
+							"command": "tellraw ${targets} {\"text\":\"You have been rewarded an apple!\",\"italic\":true,\"color\":\"gray\"}",
+							"delay_ticks": 20
+						},
 						"give ${targets} apple"
 					],
 					"arguments": [

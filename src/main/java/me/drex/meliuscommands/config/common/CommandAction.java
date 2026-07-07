@@ -32,7 +32,7 @@ import java.util.function.Function;
 
 import static eu.pb4.placeholders.api.parsers.TagLikeParser.PLACEHOLDER_USER;
 
-public record CommandAction(String command, boolean console, boolean silent, Optional<Integer> permissionLevel) {
+public record CommandAction(String command, boolean console, boolean silent, Optional<Integer> permissionLevel, int delayTicks) {
 
     private static final TagLikeParser.Format PLACEHOLDER_COMMAND = TagLikeParser.Format.of("${", "}", " ");
     private static final ParserContext.Key<Function<String, Component>> ARGUMENTS = DynamicTextNode.key("melius_commands");
@@ -46,14 +46,19 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
         .build();
 
     public CommandAction(String command) {
-        this(command, true, true, Optional.of(4));
+        this(command, true, true, Optional.of(4), 0);
+    }
+
+    public CommandAction {
+        delayTicks = Math.max(0, delayTicks);
     }
 
     public static final Codec<CommandAction> FULL_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("command").forGetter(CommandAction::command),
             Codec.BOOL.optionalFieldOf("as_console", true).forGetter(CommandAction::console),
             Codec.BOOL.optionalFieldOf("silent", true).forGetter(CommandAction::silent),
-            Codec.INT.optionalFieldOf("op_level").forGetter(CommandAction::permissionLevel)
+            Codec.INT.optionalFieldOf("op_level").forGetter(CommandAction::permissionLevel),
+            Codec.INT.optionalFieldOf("delay_ticks", 0).forGetter(CommandAction::delayTicks)
         ).apply(instance, CommandAction::new)
     );
     public static final Codec<CommandAction> CODEC = Codec.withAlternative(FULL_CODEC, Codec.STRING, CommandAction::new);
@@ -100,7 +105,14 @@ public record CommandAction(String command, boolean console, boolean silent, Opt
             *///? }
         }
 
-        ctx.getSource().getServer().getCommands().performPrefixedCommand(modifiedSource, parsedCommand);
+        CommandSourceStack finalSource = modifiedSource;
+        Runnable commandRunner = () -> ctx.getSource().getServer().getCommands().performPrefixedCommand(finalSource, parsedCommand);
+        if (delayTicks > 0) {
+            me.drex.meliuscommands.util.CommandDelayManager.schedule(ctx.getSource().getServer(), delayTicks, commandRunner);
+            return 1;
+        }
+
+        commandRunner.run();
         return result.get();
     }
 
