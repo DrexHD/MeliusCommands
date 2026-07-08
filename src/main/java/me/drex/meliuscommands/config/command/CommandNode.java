@@ -51,13 +51,7 @@ public abstract class CommandNode<T extends ArgumentBuilder<CommandSourceStack, 
             builder.requires(source -> minecraftPredicate.test(PredicateContext.of(source)).success());
         });
         if (!executions.isEmpty()) {
-            builder.executes(executionContext -> {
-                int result = 0;
-                for (CommandAction action : executions) {
-                    result += action.execute(executionContext);
-                }
-                return result;
-            });
+            builder.executes(executionContext -> CommandAction.executeAll(executionContext, executions));
         }
         for (LiteralNode literal : literals) {
             builder.then(literal.build(dispatcher, buildContext));

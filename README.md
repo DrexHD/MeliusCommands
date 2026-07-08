@@ -61,7 +61,7 @@ like this:
   "op_level": 4,
   // The operator level of the command source (optional) (Possible values: 0 - 4)
   "delay_ticks": 20
-  // Optional delay before the command is executed, measured in ticks
+  // Optional delay in ticks before this command runs. In an `executes` list, commands run in order and each delay is waited before that command runs.
 }
 ```
 The `command` execution value can use placeholders from command arguments and
