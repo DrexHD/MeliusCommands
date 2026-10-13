@@ -58,13 +58,15 @@ like this:
   // Disable command output if set to true
   "as_console": false,
   // Whether this command should be executed as console command source
-  "op_level": 4
+  "op_level": 4,
   // The operator level of the command source (optional) (Possible values: 0 - 4)
+  "delay_ticks": 20
+  // Optional delay in ticks before this command runs. In an `executes` list, commands run in order and each delay is waited before that command runs.
 }
 ```
-The `command` execution value can use placeholders from command arguments and 
-global placeholders, by using this format `${PLACEHOLDER}`, where `PLACEHOLDER` 
-can either be the argument id, or a global placeholder 
+The `command` execution value can use placeholders from command arguments and
+global placeholders, by using this format `${PLACEHOLDER}`, where `PLACEHOLDER`
+can either be the argument id, or a global placeholder
 like [player:name](https://placeholders.pb4.eu/user/default-placeholders/).
 
 #### Argument Type
@@ -117,7 +119,7 @@ modifiers.
     make sure to escape properly.
 
 ## Debug exceptions
-If you receive a `An unexpected error occurred trying to execute that command` 
+If you receive a `An unexpected error occurred trying to execute that command`
 message when executing a command you can execute `/melius-commands debug-command-exceptions`
-to toggle command exception debugger. When this mode is active additional 
+to toggle command exception debugger. When this mode is active additional
 debugging info is logged to the console when running into errors like that.

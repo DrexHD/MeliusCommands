@@ -3,6 +3,7 @@ package me.drex.meliuscommands;
 import me.drex.meliuscommands.commands.MeliusCommandsCommand;
 import me.drex.meliuscommands.config.ConfigManager;
 import me.drex.meliuscommands.mixin.CommandSourceStackAccessor;
+import me.drex.meliuscommands.util.CommandDelayManager;
 import me.drex.meliuscommands.util.CooldownManager;
 import me.drex.meliuscommands.util.PathCache;
 import me.drex.meliuscommands.util.PlaceholderManager;
@@ -33,6 +34,7 @@ public class MeliusCommands implements ModInitializer {
             MeliusCommandsCommand.register(dispatcher);
         });
         ConfigManager.init();
+        CommandDelayManager.init();
         CooldownManager.init();
         PlaceholderManager.init();
     }

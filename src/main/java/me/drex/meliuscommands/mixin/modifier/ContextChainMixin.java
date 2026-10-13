@@ -44,11 +44,7 @@ public abstract class ContextChainMixin {
                     continue;
                 }
                 if (!isExecutableModifier.isExecutable(context)) {
-                    int result = 0;
-                    for (CommandAction commandAction : isExecutableModifier.failure()) {
-                        result += commandAction.execute(context);
-                    }
-                    return result;
+                    return CommandAction.executeAll(context, isExecutableModifier.failure());
                 }
             }
         }
